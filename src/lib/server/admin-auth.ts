@@ -13,9 +13,14 @@ function sign(value: string) {
   return createHmac("sha256", secret()).update(value).digest("hex");
 }
 
+function encodePayload(value: string) {
+  return Buffer.from(value, "utf8").toString("base64url");
+}
+
 function sessionValue() {
   const payload = `${process.env.ADMIN_LOGIN_EMAIL}:${Date.now()}`;
-  return `${payload}.${sign(payload)}`;
+  const encodedPayload = encodePayload(payload);
+  return `${encodedPayload}.${sign(encodedPayload)}`;
 }
 
 export function verifyAdminCredentials(email: string, password: string) {
@@ -54,7 +59,11 @@ export async function isAdminAuthenticated() {
     const value = store.get(cookieName)?.value;
     if (!value) return false;
 
-    const [payload, signature] = value.split(".");
+    const separator = value.lastIndexOf(".");
+    if (separator === -1) return false;
+
+    const payload = value.slice(0, separator);
+    const signature = value.slice(separator + 1);
     if (!payload || !signature) return false;
 
     const expected = sign(payload);
