@@ -1,65 +1,239 @@
-import Image from "next/image";
+import {
+  ArrowRight,
+  CheckCircle,
+  Globe,
+  MessageCircle,
+  MonitorSmartphone,
+  Search,
+  ShieldCheck,
+  Wrench,
+} from "lucide-react";
+import type { Metadata } from "next";
+import Script from "next/script";
+import { ButtonLink } from "@/components/button-link";
+import { CheckList } from "@/components/check-list";
+import { FadeIn, MotionDiv } from "@/components/motion";
+import { Section } from "@/components/section";
+import { ServiceCard } from "@/components/service-card";
+import { PricingCard } from "@/components/pricing-card";
+import { pageMetadata } from "@/lib/metadata";
+import { systemHelpLinks } from "@/lib/service-pages";
+import { carePlans, services, site, systems, trustPoints } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Klickhafen | Webdesign & SEO in Castrop-Rauxel",
+  description:
+    "Website-Hilfe, Webdesign und Suchmaschinenoptimierung in Castrop-Rauxel: Unterstützung für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
+  path: "/",
+});
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Klickhafen",
+    url: site.url,
+    email: site.email,
+    areaServed: ["Deutschland", "Castrop-Rauxel", "Dortmund", "Herne", "Bochum", "Ruhrgebiet"],
+    priceRange: "29 EUR pro Stunde",
+    serviceType: [
+      "Website-Hilfe",
+      "Shop-Hilfe",
+      "Webdesign Castrop-Rauxel",
+      "SEO Castrop-Rauxel",
+      "Suchmaschinenoptimierung Castrop-Rauxel",
+      "WordPress Wartung Dortmund",
+      "Responsives Webdesign Dortmund",
+    ],
+    description: "Schnelle Website- und Shop-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
+  };
+
+  // Source: Unsplash, Christopher Gower - https://unsplash.com/photos/m_HRfLhgABo
+  const heroImageUrl =
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=82";
+  const heroTrustPoints = [
+    { label: "Transparente Preise", icon: ShieldCheck },
+    { label: "Online-Hilfe deutschlandweit", icon: Globe },
+    { label: "WordPress, Shopify, Wix & Baukästen", icon: MonitorSmartphone },
+    { label: "Persönliche Unterstützung", icon: MessageCircle },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      <Script id="home-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <section className="relative isolate overflow-hidden bg-slate-950 text-white">
+        <img
+          src={heroImageUrl}
+          alt="Professioneller Arbeitsplatz mit Laptop für Website-Support"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-center sm:object-[center_42%]"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+        <div className="absolute inset-0 -z-10 bg-slate-950/78" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(2,6,23,0.96)_0%,rgba(2,6,23,0.88)_46%,rgba(2,6,23,0.58)_100%)]" />
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:min-h-[690px] lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8 lg:py-24">
+          <div className="max-w-4xl">
+            <MotionDiv
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.08 }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Schnelle Website- & Shop-Hilfe für WordPress, Shopify, Wix & Baukästen
+              </h1>
+            </MotionDiv>
+            <MotionDiv
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.16 }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100">
+                Du kommst bei deiner Website oder deinem Shop nicht weiter? Klickhafen hilft bei kleinen Problemen,
+                Anpassungen, Formularen, mobiler Ansicht, Produkten, Zahlungsarten, Versand, Domains und
+                E-Mail-Verknüpfungen.
+              </p>
+            </MotionDiv>
+            <MotionDiv
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.24 }}
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+            >
+              <ButtonLink href="/kontakt" className="w-full bg-cyan-500 text-slate-950 hover:bg-cyan-300 sm:w-auto">
+                Website-Hilfe anfragen
+              </ButtonLink>
+              <ButtonLink
+                href="/kontakt"
+                variant="secondary"
+                className="w-full border-white/35 bg-white/10 text-white backdrop-blur hover:border-cyan-200 hover:bg-white/15 hover:text-white sm:w-auto"
+              >
+                Problem schildern
+              </ButtonLink>
+            </MotionDiv>
+            <MotionDiv
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.32 }}
+              className="mt-8 grid gap-3 sm:grid-cols-2"
+            >
+              {heroTrustPoints.map(({ label, icon: Icon }) => (
+                <div
+                  key={label}
+                  className="flex min-h-12 items-center gap-3 rounded-md border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold text-white shadow-sm backdrop-blur"
+                >
+                  <Icon className="size-4 shrink-0 text-cyan-200" aria-hidden="true" />
+                  <span className="min-w-0 break-words">{label}</span>
+                </div>
+              ))}
+            </MotionDiv>
+          </div>
+
+          <MotionDiv
+            initial={{ opacity: 0, scale: 0.97, y: 18 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: "easeOut", delay: 0.18 }}
+            className="rounded-lg border border-white/15 bg-white/12 p-4 shadow-2xl backdrop-blur-md sm:p-5 lg:ml-auto lg:max-w-md"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="rounded-lg bg-slate-950/75 p-5 ring-1 ring-white/10">
+              <div className="flex items-start justify-between gap-5">
+                <div>
+                  <p className="text-sm font-semibold text-cyan-100">Direkte Unterstützung</p>
+                  <p className="mt-3 text-3xl font-semibold tracking-tight text-white">Website-Problem klären</p>
+                  <p className="mt-3 text-sm leading-6 text-slate-200">
+                    Verständliche Hilfe für bestehende Websites, Shops und Baukasten-Systeme.
+                  </p>
+                </div>
+                <span className="grid size-12 shrink-0 place-items-center rounded-md bg-cyan-400/15 text-cyan-100">
+                  <Wrench className="size-6" aria-hidden="true" />
+                </span>
+              </div>
+              <div className="mt-6 grid gap-3">
+                {["Anpassungen & kleine Fehler", "Formulare & mobile Ansicht", "Produkte, Zahlung & Versand", "Domains & E-Mail-Verknüpfungen"].map((item) => (
+                  <div key={item} className="flex items-center gap-3 rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-slate-50">
+                    <CheckCircle className="size-4 shrink-0 text-cyan-200" aria-hidden="true" />
+                    <span className="min-w-0 break-words">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </MotionDiv>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <Section title="Für bestehende Websites, Shops und Baukasten-Systeme" text="Klickhafen hilft Selbstständigen, kleinen Unternehmen und lokalen Betrieben, wenn vorhandene Systeme haken oder gepflegt werden müssen.">
+        <div className="flex flex-wrap gap-3">
+          {systems.slice(0, 13).map((system) => (
+            <span key={system} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">{system}</span>
+          ))}
+        </div>
+      </Section>
+
+      <Section className="bg-slate-50" eyebrow="Regional & online" title="Webdesign, SEO und Website-Hilfe aus Castrop-Rauxel" text="Klickhafen unterstützt lokale Unternehmen in Castrop-Rauxel, Dortmund, Herne, Bochum und im Ruhrgebiet online bei bestehenden Websites, Shops und Baukasten-Systemen. Dazu gehören Webdesign in Castrop-Rauxel, SEO-Optimierung für lokale Sichtbarkeit, responsives Webdesign für Dortmund und WordPress-Wartung für bestehende Projekte. Wer eine Webdesign Agentur in Castrop-Rauxel oder einen Webdesigner in Castrop-Rauxel sucht, bekommt hier keine großen Agenturpakete, sondern direkte Unterstützung für bestehende Seiten.">
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            ["SEO Castrop-Rauxel", "Suchmaschinenoptimierung für bestehende Websites mit Fokus auf technische Grundlagen, Inhalte und lokale Auffindbarkeit."],
+            ["Webdesign Castrop-Rauxel", "Saubere Anpassungen, neue Unterseiten und responsive Gestaltung für Selbstständige, kleine Unternehmen und lokale Betriebe."],
+            ["WordPress Wartung Dortmund", "Regelmäßige Pflege, kleine Fehlerbehebungen und übersichtliche Unterstützung für WordPress-Websites im Raum Dortmund."],
+          ].map(([title, text]) => (
+            <FadeIn key={title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-650">{text}</p>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Hilfe für Ihre Website oder Ihren Shop" text="Wählen Sie die passende Unterstützung für Ihr System. Jede Seite erklärt typische Aufgaben, Ablauf und verwandte Leistungen.">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {systemHelpLinks.concat({
+            title: "SEO & Sichtbarkeit",
+            href: "/leistungen/seo-sichtbarkeit",
+            text: "SEO-Grundcheck, lokale Sichtbarkeit und technische Grundlagen für bestehende Websites.",
+            icon: Search,
+          }).map((service) => (
+            <ServiceCard key={service.href} title={service.title} text={service.text} price="Mehr erfahren" href={service.href} icon={service.icon} />
+          ))}
+        </div>
+      </Section>
+
+      <Section className="bg-slate-50" eyebrow="Leistungen" title="Hilfe, Pflege und Sichtbarkeit aus einer Hand" text="Die Website- & Shop-Hilfe ist die Hauptleistung. Pflegepakete und SEO können ergänzend geplant werden.">
+        <div className="grid gap-5 lg:grid-cols-3">
+          {services.map((service) => <ServiceCard key={service.title} {...service} />)}
+        </div>
+      </Section>
+
+      <Section title="Typische Probleme, bei denen wir helfen" text="Keine großen Agenturpakete. Keine komplizierte Projektphase. Sie schildern Ihr Problem, wir helfen verständlich und direkt.">
+        <CheckList columns items={["Texte und Bilder ändern", "Buttons, Menüs und Footer anpassen", "Kontaktformulare prüfen", "mobile Ansicht verbessern", "Produkte, Zahlung und Versand prüfen", "Domain, E-Mail oder Veröffentlichung begleiten"]} />
+      </Section>
+
+      <Section className="bg-slate-50" title="Pflegepakete kurz erklärt" text="Regelmäßige Pflege statt Einzelstunden, für planbare monatliche Kosten.">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {carePlans.map((plan) => <PricingCard key={plan.name} {...plan} />)}
+        </div>
+      </Section>
+
+      <Section title="Warum Klickhafen" text="Schnelle Hilfe soll verständlich, fair und erreichbar bleiben. Vorhandene Google-Bewertungen können auf Wunsch eingesehen werden, ohne dass hier Bewertungen erfunden werden.">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {trustPoints.map(({ title, text, icon: Icon }) => (
+            <FadeIn key={title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <Icon className="size-7 text-cyan-700" />
+              <h3 className="mt-4 text-lg font-semibold text-slate-950">{title}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-650">{text}</p>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      <section className="bg-cyan-950 py-16 text-white sm:py-20">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div className="max-w-3xl">
+            <Globe className="size-8 text-cyan-200" />
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">Jetzt Unterstützung erhalten</h2>
+            <p className="mt-4 text-lg leading-8 text-cyan-50">Schildern Sie kurz, wo es hakt. Klickhafen unterstützt online in Castrop-Rauxel, Dortmund, Herne, Bochum, im Ruhrgebiet und deutschlandweit.</p>
+          </div>
+          <ButtonLink href="/kontakt" variant="secondary" className="shrink-0">
+            Jetzt Unterstützung erhalten <ArrowRight className="ml-2 size-4" />
+          </ButtonLink>
+        </div>
+      </section>
+    </>
   );
 }
