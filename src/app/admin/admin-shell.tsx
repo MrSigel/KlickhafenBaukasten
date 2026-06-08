@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, Home, Inbox, LogOut, Receipt, Settings, Users } from "lucide-react";
+import { Archive, FileText, Home, Inbox, LogOut, Receipt, Settings, Users } from "lucide-react";
 import { logoutAction } from "./actions";
 
 const items = [
@@ -8,6 +8,7 @@ const items = [
   { href: "/admin/kunden", label: "Kunden", icon: Users },
   { href: "/admin/angebote", label: "Angebote", icon: FileText },
   { href: "/admin/rechnungen", label: "Rechnungen", icon: Receipt },
+  { href: "/admin/archiv", label: "Archiv", icon: Archive },
   { href: "/admin/einstellungen", label: "Einstellungen", icon: Settings },
 ];
 

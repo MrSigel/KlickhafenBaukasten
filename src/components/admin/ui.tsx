@@ -23,8 +23,29 @@ export function StatCard({ label, value }: { label: string; value: React.ReactNo
 }
 
 export function StatusBadge({ value }: { value?: string }) {
-  const label = value || "unbekannt";
+  const label = statusLabel(value);
   return <span className="rounded-md bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-800">{label}</span>;
+}
+
+export function statusLabel(value?: string) {
+  const labels: Record<string, string> = {
+    new: "Neu",
+    in_review: "In Prüfung",
+    answered: "Beantwortet",
+    converted: "Umgewandelt",
+    closed: "Geschlossen",
+    spam: "Spam",
+    draft: "Entwurf",
+    sent: "Gesendet",
+    accepted: "Angenommen",
+    rejected: "Abgelehnt",
+    expired: "Abgelaufen",
+    paid: "Bezahlt",
+    overdue: "Überfällig",
+    cancelled: "Storniert",
+    partially_paid: "Teilweise bezahlt",
+  };
+  return value ? labels[value] || value : "Unbekannt";
 }
 
 export function AdminLink({ href, children }: { href: string; children: React.ReactNode }) {

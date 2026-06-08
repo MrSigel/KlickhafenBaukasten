@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { calculateTotals, euroToCents } from "@/lib/server/money";
 import { nextNumber } from "@/lib/server/numbering";
+import { logActivity } from "@/lib/server/activity";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 
 export async function createOfferAction(formData: FormData) {
@@ -41,6 +42,14 @@ export async function createOfferAction(formData: FormData) {
       quantity,
       unit_price_cents: euroToCents(unitPrice),
       line_total_cents: euroToCents(quantity * unitPrice),
+    });
+    await logActivity({
+      action: "created",
+      entityType: "offer",
+      entityId: data.id,
+      title: "Angebot erstellt",
+      description: offer_number,
+      metadata: { offer_number, status: String(formData.get("status") || "draft") },
     });
     redirect(`/admin/angebote/${data.id}`);
   }

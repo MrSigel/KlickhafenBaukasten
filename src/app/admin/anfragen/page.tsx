@@ -1,7 +1,9 @@
-import { AdminHeader, StatusBadge } from "@/components/admin/ui";
+import { AdminHeader, StatusBadge, statusLabel } from "@/components/admin/ui";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { AdminGuard } from "../guard";
-import { updateInquiryAction } from "../lib";
+import { deleteInquiryAction, updateInquiryAction } from "../lib";
+
+const inquiryStatuses = ["new", "in_review", "answered", "converted", "closed", "spam"];
 
 export default async function AdminInquiriesPage({ searchParams }: { searchParams: Promise<{ q?: string; status?: string }> }) {
   const params = await searchParams;
@@ -14,7 +16,7 @@ export default async function AdminInquiriesPage({ searchParams }: { searchParam
   return (
     <AdminGuard>
       <AdminHeader title="Anfragen" text="Alle Website-Anfragen mit Status, Details und interner Notiz." />
-      <Filter statusOptions={["new", "in_review", "answered", "converted", "closed", "spam"]} />
+      <Filter statusOptions={inquiryStatuses} />
       {error ? <p className="rounded-md bg-red-50 p-4 text-red-800">Anfragen konnten nicht geladen werden.</p> : null}
       <div className="mt-6 space-y-4">
         {(data || []).map((row) => (
@@ -28,14 +30,20 @@ export default async function AdminInquiriesPage({ searchParams }: { searchParam
                 <p className="mt-2 text-sm text-slate-600">{row.email} · {row.company || "Keine Firma"} · {row.website_url || "Keine Website"}</p>
                 <p className="mt-3 leading-7 text-slate-700">{row.message}</p>
               </div>
-              <form action={updateInquiryAction} className="grid min-w-64 gap-3">
-                <input type="hidden" name="id" value={row.id} />
-                <select name="status" defaultValue={row.status} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
-                  {["new", "in_review", "answered", "converted", "closed", "spam"].map((status) => <option key={status}>{status}</option>)}
-                </select>
-                <textarea name="admin_notes" defaultValue={row.admin_notes || ""} placeholder="Interne Notiz" className="min-h-24 rounded-md border border-slate-300 px-3 py-2 text-sm" />
-                <button className="rounded-md bg-cyan-700 px-4 py-2 text-sm font-semibold text-white">Speichern</button>
-              </form>
+              <div className="grid min-w-64 gap-3">
+                <form action={updateInquiryAction} className="grid gap-3">
+                  <input type="hidden" name="id" value={row.id} />
+                  <select name="status" defaultValue={row.status} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
+                    {inquiryStatuses.map((status) => <option key={status} value={status}>{statusLabel(status)}</option>)}
+                  </select>
+                  <textarea name="admin_notes" defaultValue={row.admin_notes || ""} placeholder="Interne Notiz" className="min-h-24 rounded-md border border-slate-300 px-3 py-2 text-sm" />
+                  <button className="rounded-md bg-cyan-700 px-4 py-2 text-sm font-semibold text-white">Speichern</button>
+                </form>
+                <form action={deleteInquiryAction}>
+                  <input type="hidden" name="id" value={row.id} />
+                  <button className="w-full rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100">Anfrage löschen</button>
+                </form>
+              </div>
             </div>
           </div>
         ))}
@@ -51,7 +59,7 @@ function Filter({ statusOptions }: { statusOptions: string[] }) {
       <input name="q" placeholder="Suche nach Name, E-Mail, Unternehmen oder Website" className="rounded-md border border-slate-300 px-3 py-2" />
       <select name="status" className="rounded-md border border-slate-300 px-3 py-2">
         <option value="">Alle Status</option>
-        {statusOptions.map((status) => <option key={status}>{status}</option>)}
+        {statusOptions.map((status) => <option key={status} value={status}>{statusLabel(status)}</option>)}
       </select>
       <button className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white">Filtern</button>
     </form>

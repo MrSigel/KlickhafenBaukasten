@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { calculateTotals, euroToCents } from "@/lib/server/money";
 import { nextNumber } from "@/lib/server/numbering";
+import { logActivity } from "@/lib/server/activity";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 
 export async function createInvoiceAction(formData: FormData) {
@@ -38,6 +39,14 @@ export async function createInvoiceAction(formData: FormData) {
       quantity,
       unit_price_cents: euroToCents(unitPrice),
       line_total_cents: euroToCents(quantity * unitPrice),
+    });
+    await logActivity({
+      action: "created",
+      entityType: "invoice",
+      entityId: data.id,
+      title: "Rechnung erstellt",
+      description: invoice_number,
+      metadata: { invoice_number, status: String(formData.get("status") || "sent") },
     });
     redirect(`/admin/rechnungen/${data.id}`);
   }

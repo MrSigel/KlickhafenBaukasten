@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { logActivity } from "@/lib/server/activity";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 
 export async function updateInquiryAction(formData: FormData) {
@@ -7,12 +8,45 @@ export async function updateInquiryAction(formData: FormData) {
   const status = String(formData.get("status"));
   const admin_notes = String(formData.get("admin_notes") || "");
   await getSupabaseAdmin().from("inquiries").update({ status, admin_notes }).eq("id", id);
+  await logActivity({
+    action: "updated",
+    entityType: "inquiry",
+    entityId: id,
+    title: "Anfrage aktualisiert",
+    description: `Status wurde auf ${status} gesetzt.`,
+    metadata: { status, has_admin_notes: Boolean(admin_notes) },
+  });
   revalidatePath("/admin/anfragen");
+  revalidatePath("/admin/archiv");
+}
+
+export async function deleteInquiryAction(formData: FormData) {
+  "use server";
+  const id = String(formData.get("id"));
+  const supabase = getSupabaseAdmin();
+  const { data: inquiry } = await supabase
+    .from("inquiries")
+    .select("id, first_name, last_name, email, company, website_url, status")
+    .eq("id", id)
+    .single();
+
+  await supabase.from("inquiries").delete().eq("id", id);
+  await logActivity({
+    action: "deleted",
+    entityType: "inquiry",
+    entityId: id,
+    title: "Anfrage gelöscht",
+    description: inquiry ? `${inquiry.first_name || ""} ${inquiry.last_name || ""} (${inquiry.email || "ohne E-Mail"})` : "Eine Anfrage wurde gelöscht.",
+    metadata: inquiry || {},
+  });
+  revalidatePath("/admin/anfragen");
+  revalidatePath("/admin/archiv");
 }
 
 export async function createCustomerAction(formData: FormData) {
   "use server";
-  await getSupabaseAdmin().from("customers").insert({
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase.from("customers").insert({
     type: String(formData.get("type") || "business"),
     first_name: String(formData.get("first_name") || ""),
     last_name: String(formData.get("last_name") || ""),
@@ -26,8 +60,19 @@ export async function createCustomerAction(formData: FormData) {
     country: String(formData.get("country") || "Deutschland"),
     notes: String(formData.get("notes") || ""),
     status: "active",
-  });
+  }).select("id, email, company").single();
+  if (data) {
+    await logActivity({
+      action: "created",
+      entityType: "customer",
+      entityId: data.id,
+      title: "Kunde erstellt",
+      description: data.company || data.email || "Neuer Kunde",
+      metadata: { email: data.email, company: data.company },
+    });
+  }
   revalidatePath("/admin/kunden");
+  revalidatePath("/admin/archiv");
 }
 
 export async function updateSettingsAction(formData: FormData) {
@@ -48,5 +93,13 @@ export async function updateSettingsAction(formData: FormData) {
   await getSupabaseAdmin()
     .from("settings")
     .upsert({ key: "admin_settings", value, description: "Admin Dashboard Einstellungen", is_secret: false }, { onConflict: "key" });
+  await logActivity({
+    action: "updated",
+    entityType: "settings",
+    title: "Einstellungen aktualisiert",
+    description: "Admin-Einstellungen wurden gespeichert.",
+    metadata: { hourly_rate_cents: value.hourly_rate_cents, vat_enabled: value.vat_enabled },
+  });
   revalidatePath("/admin/einstellungen");
+  revalidatePath("/admin/archiv");
 }
