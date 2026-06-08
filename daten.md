@@ -1,0 +1,33 @@
+# Supabase Public Client
+NEXT_PUBLIC_SUPABASE_URL=https://skdtvcuqmyqznvdpchdu.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZHR2Y3VxbXlxem52ZHBjaGR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4Njg5MTMsImV4cCI6MjA5NjQ0NDkxM30.RCiJ9LEi6smYP1hFQIy-QHN0AzUu0FdZZrcvaCyqjbk
+
+# Supabase Server/Admin
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZHR2Y3VxbXlxem52ZHBjaGR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDg2ODkxMywiZXhwIjoyMDk2NDQ0OTEzfQ.sWihif4Dh2orGGJaoH48S55hy03oej6rd1nluIZBrOk
+
+# Admin Login
+ADMIN_LOGIN_EMAIL=kontakt@klickhafen.net
+ADMIN_LOGIN_PASSWORD=5M4bjgrp5w!
+
+# Cron / Keep-Alive
+CRON_SECRET=
+
+# Website
+NEXT_PUBLIC_SITE_URL=https://klickhafen.net
+NEXT_PUBLIC_SITE_NAME=Klickhafen
+
+# Kontakt
+NEXT_PUBLIC_CONTACT_EMAIL=hallo@klickhafen.net
+NEXT_PUBLIC_CONTACT_PHONE=+4915563535989
+NEXT_PUBLIC_CONTACT_WHATSAPP=+4915563535989
+
+# SMTP / United Domains Mail
+SMTP_HOST=smtps.udag.de
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=hallo@klickhafen.net
+SMTP_PASSWORD=5M4bjgrp5w!
+SMTP_FROM="Klickhafen <kontakt@klickhafen.net>"
+CONTACT_RECEIVER_EMAIL=kontakt@klickhafen.net
+
+CRON_SECRET=klickhafen_keepalive_2026_super_secret

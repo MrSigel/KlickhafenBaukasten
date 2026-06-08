@@ -1,7 +1,5 @@
 "use client";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { X } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 
@@ -59,12 +57,6 @@ export function CookieConsent() {
 
   return (
     <>
-      {consent?.analytics ? (
-        <>
-          <Analytics />
-          <SpeedInsights />
-        </>
-      ) : null}
       {open ? (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/70 px-4 py-6 backdrop-blur-sm">
           <div

@@ -2,6 +2,7 @@
 
 import { Send } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const services = [
   "Website- & Shop-Hilfe",
@@ -46,8 +47,30 @@ const inputClass =
   "w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-700 focus:ring-4 focus:ring-cyan-100";
 
 export function ContactForm() {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setStatus("loading");
+    setMessage("");
+
+    const response = await fetch("/api/inquiries", {
+      method: "POST",
+      body: new FormData(event.currentTarget),
+    });
+    const result = (await response.json()) as { ok: boolean; message: string };
+
+    setStatus(result.ok ? "success" : "error");
+    setMessage(result.message);
+
+    if (result.ok) {
+      event.currentTarget.reset();
+    }
+  }
+
   return (
-    <form className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+    <form onSubmit={submit} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Anrede">
           <select className={inputClass} name="anrede">
@@ -96,15 +119,18 @@ export function ContactForm() {
           <textarea className={`${inputClass} min-h-40 resize-y`} name="nachricht" required />
         </Field>
       </div>
-      <p className="mt-4 text-sm leading-6 text-slate-600">
-        Das Formular ist für die lokale Anfrage vorbereitet. Ohne angebundenes Backend werden keine Daten versendet.
-      </p>
+      {message ? (
+        <p className={`mt-4 rounded-md p-3 text-sm font-semibold ${status === "success" ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-800"}`}>
+          {message}
+        </p>
+      ) : null}
       <motion.button
-        type="button"
+        type="submit"
+        disabled={status === "loading"}
         whileTap={{ scale: 0.98 }}
-        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800 sm:w-auto"
+        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
       >
-        Anfrage vorbereiten <Send className="size-4" aria-hidden="true" />
+        {status === "loading" ? "Anfrage wird gesendet" : "Anfrage senden"} <Send className="size-4" aria-hidden="true" />
       </motion.button>
     </form>
   );

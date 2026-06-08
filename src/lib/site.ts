@@ -22,7 +22,7 @@ export const site = {
   name: "Klickhafen",
   url: "https://klickhafen.net",
   domain: "klickhafen.net",
-  email: "kontakt@klickhafen.net",
+  email: "hallo@klickhafen.net",
   owner: "Enrico Gross",
   businessType: "Einzelunternehmer",
   address: "Gerther Straße 76, 44577 Castrop-Rauxel, Deutschland",
