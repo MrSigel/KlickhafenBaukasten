@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "crypto";
+import type { NextResponse } from "next/server";
 
 const cookieName = "klickhafen_admin_session";
 const maxAge = 60 * 60 * 8;
@@ -12,14 +13,28 @@ function sign(value: string) {
   return createHmac("sha256", secret()).update(value).digest("hex");
 }
 
+function sessionValue() {
+  const payload = `${process.env.ADMIN_LOGIN_EMAIL}:${Date.now()}`;
+  return `${payload}.${sign(payload)}`;
+}
+
 export function verifyAdminCredentials(email: string, password: string) {
   return email === process.env.ADMIN_LOGIN_EMAIL && password === process.env.ADMIN_LOGIN_PASSWORD;
 }
 
 export async function createAdminSession() {
   const store = await cookies();
-  const payload = `${process.env.ADMIN_LOGIN_EMAIL}:${Date.now()}`;
-  store.set(cookieName, `${payload}.${sign(payload)}`, {
+  store.set(cookieName, sessionValue(), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge,
+  });
+}
+
+export function setAdminSessionCookie(response: NextResponse) {
+  response.cookies.set(cookieName, sessionValue(), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",

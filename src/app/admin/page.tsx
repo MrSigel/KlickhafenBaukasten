@@ -1,8 +1,12 @@
 import { AdminHeader, AdminLink, Money, StatCard, StatusBadge } from "@/components/admin/ui";
+import { isAdminAuthenticated } from "@/lib/server/admin-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
-import { AdminGuard } from "./guard";
+import { redirect } from "next/navigation";
+import { AdminShell } from "./admin-shell";
 
 export default async function AdminDashboardPage() {
+  if (!(await isAdminAuthenticated())) redirect("/admin/login");
+
   const supabase = getSupabaseAdmin();
   const [{ count: newInquiries }, { count: openInquiries }, { count: customers }, { count: offers }, { count: acceptedOffers }, { count: openInvoices }, { count: paidInvoices }, inquiries, customerRows, invoiceRows, paidTotals, openTotals] = await Promise.all([
     supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "new"),
@@ -23,7 +27,7 @@ export default async function AdminDashboardPage() {
   const open = openTotals.data?.reduce((sum, row) => sum + (row.total_cents || 0), 0) || 0;
 
   return (
-    <AdminGuard>
+    <AdminShell>
       <AdminHeader title="Dashboard" text="Überblick über Anfragen, Kunden, Angebote und Rechnungen." />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Neue Anfragen" value={newInquiries || 0} />
@@ -63,7 +67,7 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
       </div>
-    </AdminGuard>
+    </AdminShell>
   );
 }
 
