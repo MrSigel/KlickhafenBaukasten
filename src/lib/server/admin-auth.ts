@@ -49,13 +49,21 @@ export async function destroyAdminSession() {
 }
 
 export async function isAdminAuthenticated() {
-  const store = await cookies();
-  const value = store.get(cookieName)?.value;
-  if (!value) return false;
+  try {
+    const store = await cookies();
+    const value = store.get(cookieName)?.value;
+    if (!value) return false;
 
-  const [payload, signature] = value.split(".");
-  if (!payload || !signature) return false;
+    const [payload, signature] = value.split(".");
+    if (!payload || !signature) return false;
 
-  const expected = sign(payload);
-  return timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+    const expected = sign(payload);
+    const signatureBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expected);
+    if (signatureBuffer.length !== expectedBuffer.length) return false;
+
+    return timingSafeEqual(signatureBuffer, expectedBuffer);
+  } catch {
+    return false;
+  }
 }

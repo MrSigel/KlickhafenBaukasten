@@ -7,21 +7,41 @@ import { AdminShell } from "./admin-shell";
 export default async function AdminDashboardPage() {
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
 
-  const supabase = getSupabaseAdmin();
-  const [{ count: newInquiries }, { count: openInquiries }, { count: customers }, { count: offers }, { count: acceptedOffers }, { count: openInvoices }, { count: paidInvoices }, inquiries, customerRows, invoiceRows, paidTotals, openTotals] = await Promise.all([
-    supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "new"),
-    supabase.from("inquiries").select("id", { count: "exact", head: true }).in("status", ["new", "in_review", "answered"]),
-    supabase.from("customers").select("id", { count: "exact", head: true }),
-    supabase.from("offers").select("id", { count: "exact", head: true }),
-    supabase.from("offers").select("id", { count: "exact", head: true }).eq("status", "accepted"),
-    supabase.from("invoices").select("id", { count: "exact", head: true }).in("status", ["sent", "overdue", "partially_paid"]),
-    supabase.from("invoices").select("id", { count: "exact", head: true }).eq("status", "paid"),
-    supabase.from("inquiries").select("*").order("created_at", { ascending: false }).limit(5),
-    supabase.from("customers").select("*").order("created_at", { ascending: false }).limit(5),
-    supabase.from("invoices").select("*").in("status", ["sent", "overdue", "partially_paid"]).order("created_at", { ascending: false }).limit(5),
-    supabase.from("invoices").select("total_cents").eq("status", "paid"),
-    supabase.from("invoices").select("total_cents").in("status", ["sent", "overdue", "partially_paid"]),
-  ]);
+  let dashboardData;
+
+  try {
+    const supabase = getSupabaseAdmin();
+    const results = await Promise.all([
+      supabase.from("inquiries").select("id", { count: "exact", head: true }).eq("status", "new"),
+      supabase.from("inquiries").select("id", { count: "exact", head: true }).in("status", ["new", "in_review", "answered"]),
+      supabase.from("customers").select("id", { count: "exact", head: true }),
+      supabase.from("offers").select("id", { count: "exact", head: true }),
+      supabase.from("offers").select("id", { count: "exact", head: true }).eq("status", "accepted"),
+      supabase.from("invoices").select("id", { count: "exact", head: true }).in("status", ["sent", "overdue", "partially_paid"]),
+      supabase.from("invoices").select("id", { count: "exact", head: true }).eq("status", "paid"),
+      supabase.from("inquiries").select("*").order("created_at", { ascending: false }).limit(5),
+      supabase.from("customers").select("*").order("created_at", { ascending: false }).limit(5),
+      supabase.from("invoices").select("*").in("status", ["sent", "overdue", "partially_paid"]).order("created_at", { ascending: false }).limit(5),
+      supabase.from("invoices").select("total_cents").eq("status", "paid"),
+      supabase.from("invoices").select("total_cents").in("status", ["sent", "overdue", "partially_paid"]),
+    ]);
+    dashboardData = results;
+  } catch {
+    return (
+      <AdminShell>
+        <AdminHeader title="Dashboard" text="Der Admin-Login war erfolgreich." />
+        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-red-900 shadow-sm">
+          <h2 className="text-lg font-semibold">Admin-Daten konnten nicht geladen werden.</h2>
+          <p className="mt-3 leading-7">
+            Bitte prüfen Sie in Vercel die Environment Variablen `NEXT_PUBLIC_SUPABASE_URL` und `SUPABASE_SERVICE_ROLE_KEY`.
+            Der Login funktioniert, aber die Verbindung zu Supabase ist aktuell nicht verfügbar.
+          </p>
+        </div>
+      </AdminShell>
+    );
+  }
+
+  const [{ count: newInquiries }, { count: openInquiries }, { count: customers }, { count: offers }, { count: acceptedOffers }, { count: openInvoices }, { count: paidInvoices }, inquiries, customerRows, invoiceRows, paidTotals, openTotals] = dashboardData;
 
   const paid = paidTotals.data?.reduce((sum, row) => sum + (row.total_cents || 0), 0) || 0;
   const open = openTotals.data?.reduce((sum, row) => sum + (row.total_cents || 0), 0) || 0;
