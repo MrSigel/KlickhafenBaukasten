@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import chromium from "@sparticuz/chromium";
+import { chromium as playwrightChromium } from "playwright";
 import { isAdminAuthenticated } from "@/lib/server/admin-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { logActivity } from "@/lib/server/activity";
@@ -141,38 +143,22 @@ export async function generateReferenceScreenshotAction(formData: FormData) {
 }
 
 async function createAndStoreScreenshot(id: string, rawUrl: string): Promise<ScreenshotResult> {
-  let browser: any = null;
+  let browser: Awaited<ReturnType<typeof playwrightChromium.launch>> | null = null;
 
   try {
     const url = normalizeUrl(rawUrl);
-    const dynamicImport = new Function("specifier", "return import(specifier)") as (specifier: string) => Promise<any>;
-    const playwright = await dynamicImport("playwright").catch(() => null);
-    if (!playwright?.chromium) {
-      return {
-        ok: false,
-        error:
-          "Playwright ist in dieser Umgebung nicht installiert. Bitte installieren Sie die Projektabhängigkeiten neu.",
-      };
-    }
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_REGION);
 
-    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_REGION);
-    if (isVercel) {
-      const chromium = await dynamicImport("@sparticuz/chromium").catch(() => null);
-      if (!chromium?.default) {
-        return {
-          ok: false,
-          error: "Chromium für Serverless-Screenshots ist nicht verfügbar.",
-        };
-      }
-
-      browser = await playwright.chromium.launch({
-        args: chromium.default.args,
-        executablePath: await chromium.default.executablePath(),
-        headless: chromium.default.headless,
+    if (isServerless) {
+      browser = await playwrightChromium.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath(),
+        headless: true,
       });
     } else {
-      browser = await playwright.chromium.launch({ headless: true });
+      browser = await playwrightChromium.launch({ headless: true });
     }
+
     const page = await browser.newPage({ viewport: { width: 1200, height: 800 }, deviceScaleFactor: 1 });
     await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
     const buffer = await page.screenshot({ type: "png", fullPage: false });
