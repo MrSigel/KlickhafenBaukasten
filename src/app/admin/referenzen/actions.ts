@@ -151,11 +151,28 @@ async function createAndStoreScreenshot(id: string, rawUrl: string): Promise<Scr
       return {
         ok: false,
         error:
-          "Playwright ist in dieser Umgebung nicht installiert. Installieren Sie Playwright oder binden Sie später einen externen Screenshot-Dienst an.",
+          "Playwright ist in dieser Umgebung nicht installiert. Bitte installieren Sie die Projektabhängigkeiten neu.",
       };
     }
 
-    browser = await playwright.chromium.launch({ headless: true });
+    const isVercel = Boolean(process.env.VERCEL || process.env.AWS_REGION);
+    if (isVercel) {
+      const chromium = await dynamicImport("@sparticuz/chromium").catch(() => null);
+      if (!chromium?.default) {
+        return {
+          ok: false,
+          error: "Chromium für Serverless-Screenshots ist nicht verfügbar.",
+        };
+      }
+
+      browser = await playwright.chromium.launch({
+        args: chromium.default.args,
+        executablePath: await chromium.default.executablePath(),
+        headless: chromium.default.headless,
+      });
+    } else {
+      browser = await playwright.chromium.launch({ headless: true });
+    }
     const page = await browser.newPage({ viewport: { width: 1200, height: 800 }, deviceScaleFactor: 1 });
     await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
     const buffer = await page.screenshot({ type: "png", fullPage: false });
