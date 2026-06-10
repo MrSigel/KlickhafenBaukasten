@@ -22,11 +22,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Klickhafen | Website-Hilfe für WordPress, Shopify, Wix & Baukästen",
+    default: "Klickhafen | Webdesign, Landingpages & Website-Hilfe",
     template: "%s",
   },
   description:
-    "Schnelle Website- & Shop-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites. Unterstützung ab 29 Euro pro Stunde.",
+    "Klickhafen erstellt moderne Websites und Landingpages mit WordPress oder Baukasten-Systemen und hilft bei bestehenden Websites, Shops und SEO-Grundlagen.",
   applicationName: site.name,
   manifest: "/manifest.webmanifest",
   alternates: { canonical: site.url },
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
     "msapplication-TileImage": "/mstile-150x150.png",
   },
   openGraph: {
-    title: "Klickhafen | Website-Hilfe für WordPress, Shopify, Wix & Baukästen",
+    title: "Klickhafen | Webdesign, Landingpages & Website-Hilfe",
     description:
-      "Schnelle Website- & Shop-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites. Unterstützung ab 29 Euro pro Stunde.",
+      "Moderne Websites, Landingpages, Website-Hilfe und SEO-Grundlagen für Selbstständige und kleine Unternehmen.",
     url: site.url,
     siteName: site.name,
     locale: "de_DE",
@@ -65,9 +65,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Klickhafen | Website-Hilfe für WordPress, Shopify, Wix & Baukästen",
+    title: "Klickhafen | Webdesign, Landingpages & Website-Hilfe",
     description:
-      "Schnelle Website- & Shop-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
+      "Moderne Websites, Landingpages und Hilfe bei bestehenden Websites, Shops und SEO-Grundlagen.",
     images: ["/opengraph-image"],
   },
 };

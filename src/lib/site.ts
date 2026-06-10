@@ -78,9 +78,9 @@ export const helpTasks = [
 ];
 
 export const trustPoints = [
-  { title: "Transparente Preise", text: "29 Euro pro Stunde für einzelne Website- und Shop-Hilfe.", icon: ShieldCheck },
-  { title: "Schnelle Online-Hilfe", text: "Direkte Unterstützung ohne lange Agenturphase.", icon: Zap },
-  { title: "Verständliche Umsetzung", text: "Klare Erklärung, saubere Anpassung, nachvollziehbare Abrechnung.", icon: MessageCircle },
+  { title: "Klare Einschätzung", text: "Vorab wird verständlich geklärt, welcher Umfang sinnvoll ist.", icon: ShieldCheck },
+  { title: "Neue und bestehende Websites", text: "Unterstützung für neue Websites, Landingpages und vorhandene Systeme.", icon: Zap },
+  { title: "Verständliche Umsetzung", text: "Klare Erklärung, saubere Struktur und nachvollziehbare Abrechnung.", icon: MessageCircle },
   { title: "Deutschlandweit erreichbar", text: "Persönliche Hilfe online, auch für Castrop-Rauxel, Dortmund, Herne, Bochum und das Ruhrgebiet.", icon: Globe },
 ];
 
@@ -93,12 +93,19 @@ export const services: Array<{
   featured?: boolean;
 }> = [
   {
+    title: "Webdesign & Webentwicklung",
+    href: "/leistungen/webdesign-webentwicklung",
+    price: "Individuell nach Umfang",
+    text: "Moderne Websites, Landingpages, Onepager und kleine Unternehmenswebsites mit WordPress oder Baukasten-Systemen.",
+    icon: Code,
+    featured: true,
+  },
+  {
     title: "Website- & Shop-Hilfe",
     href: "/leistungen/website-shop-hilfe",
-    price: "29 Euro pro Stunde",
+    price: "Transparente Abrechnung",
     text: "Hilfe bei bestehenden Websites und Shops, wenn etwas nicht funktioniert oder angepasst werden soll.",
     icon: Wrench,
-    featured: true,
   },
   {
     title: "SEO & Sichtbarkeit",

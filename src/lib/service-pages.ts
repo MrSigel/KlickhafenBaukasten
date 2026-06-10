@@ -50,9 +50,9 @@ export const servicePages: ServicePage[] = [
   {
     slug: "wordpress-hilfe",
     title: "WordPress-Hilfe für bestehende Websites",
-    metaTitle: "WordPress-Hilfe ab 29 € pro Stunde | Klickhafen",
+    metaTitle: "WordPress-Hilfe & WordPress-Websites | Klickhafen",
     metaDescription:
-      "Schnelle WordPress-Hilfe für bestehende Websites: Änderungen, Fehler, Elementor, Formulare, mobile Ansicht und SEO-Grundlagen - transparent ab 29 € pro Stunde.",
+      "Hilfe bei bestehenden WordPress-Websites und Unterstützung bei neuen WordPress-Websites, Anpassungen, Formularen, mobiler Ansicht und SEO-Grundlagen.",
     eyebrow: "WordPress Support",
     intro:
       "Klickhafen hilft bei bestehenden WordPress-Websites, wenn Anpassungen, Fehlerbehebungen, neue Inhalte, Formularprobleme, mobile Darstellung oder kleine technische Änderungen notwendig sind. Die Unterstützung erfolgt online für Castrop-Rauxel, das Ruhrgebiet und deutschlandweit.",
@@ -73,6 +73,7 @@ export const servicePages: ServicePage[] = [
       "SEO-Grundlagen prüfen",
     ],
     related: [
+      { label: "Webdesign & Webentwicklung", href: "/leistungen/webdesign-webentwicklung" },
       { label: "WooCommerce-Hilfe", href: "/leistungen/woocommerce-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
       { label: "SEO & Sichtbarkeit", href: "/leistungen/seo-sichtbarkeit" },
@@ -204,6 +205,7 @@ export const servicePages: ServicePage[] = [
       "SEO-Grundlagen prüfen",
     ],
     related: [
+      { label: "Webdesign & Webentwicklung", href: "/leistungen/webdesign-webentwicklung" },
       { label: "Wix-Hilfe", href: "/leistungen/wix-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
       { label: "SEO & Sichtbarkeit", href: "/leistungen/seo-sichtbarkeit" },

@@ -1,7 +1,9 @@
 import {
   ArrowRight,
   CheckCircle,
+  Code,
   Globe,
+  LayoutTemplate,
   MessageCircle,
   MonitorSmartphone,
   Search,
@@ -16,18 +18,21 @@ import { FadeIn, MotionDiv } from "@/components/motion";
 import { Section } from "@/components/section";
 import { ServiceCard } from "@/components/service-card";
 import { PricingCard } from "@/components/pricing-card";
+import { ReferenceCard } from "@/components/reference-card";
 import { pageMetadata } from "@/lib/metadata";
+import { getActiveReferences } from "@/lib/references";
 import { systemHelpLinks } from "@/lib/service-pages";
 import { carePlans, services, site, systems, trustPoints } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Klickhafen | Webdesign & SEO in Castrop-Rauxel",
+  title: "Klickhafen | Webdesign, Landingpages & Website-Hilfe",
   description:
-    "Website-Hilfe, Webdesign und Suchmaschinenoptimierung in Castrop-Rauxel: Unterstützung für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
+    "Klickhafen erstellt moderne Websites und Landingpages mit WordPress oder Baukasten-Systemen und hilft bei bestehenden Websites, Shops und SEO-Grundlagen.",
   path: "/",
 });
 
-export default function Home() {
+export default async function Home() {
+  const references = await getActiveReferences(3);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -35,8 +40,14 @@ export default function Home() {
     url: site.url,
     email: site.email,
     areaServed: ["Deutschland", "Castrop-Rauxel", "Dortmund", "Herne", "Bochum", "Ruhrgebiet"],
-    priceRange: "29 EUR pro Stunde",
+    priceRange: "Individuell nach Umfang",
     serviceType: [
+      "Webdesign",
+      "Webentwicklung",
+      "Landingpage erstellen lassen",
+      "Website erstellen lassen",
+      "WordPress-Website erstellen",
+      "Baukasten-Website erstellen",
       "Website-Hilfe",
       "Shop-Hilfe",
       "Webdesign Castrop-Rauxel",
@@ -45,17 +56,40 @@ export default function Home() {
       "WordPress Wartung Dortmund",
       "Responsives Webdesign Dortmund",
     ],
-    description: "Schnelle Website- und Shop-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
+    description: "Webdesign, Landingpages und Website-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
   };
 
   // Source: Unsplash, Christopher Gower - https://unsplash.com/photos/m_HRfLhgABo
   const heroImageUrl =
     "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=82";
   const heroTrustPoints = [
-    { label: "Transparente Preise", icon: ShieldCheck },
-    { label: "Online-Hilfe deutschlandweit", icon: Globe },
-    { label: "WordPress, Shopify, Wix & Baukästen", icon: MonitorSmartphone },
-    { label: "Persönliche Unterstützung", icon: MessageCircle },
+    { label: "Websites & Landingpages", icon: LayoutTemplate },
+    { label: "WordPress & Baukasten-Systeme", icon: MonitorSmartphone },
+    { label: "Website-Hilfe & Pflege", icon: ShieldCheck },
+    { label: "Online & deutschlandweit", icon: Globe },
+  ];
+  const entryCards = [
+    {
+      title: "Neue Website erstellen lassen",
+      text: "Für Landingpages, Onepager und moderne Unternehmenswebsites mit WordPress oder passenden Baukasten-Systemen.",
+      cta: "Website erstellen lassen",
+      href: "/leistungen/webdesign-webentwicklung",
+      icon: LayoutTemplate,
+    },
+    {
+      title: "Bestehende Website verbessern",
+      text: "Für neue Inhalte, bessere Struktur, mobile Optimierung, Formulare, Design-Anpassungen und technische Verbesserungen.",
+      cta: "Website verbessern",
+      href: "/kontakt",
+      icon: Wrench,
+    },
+    {
+      title: "Website- & Shop-Hilfe",
+      text: "Für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites, wenn etwas nicht funktioniert oder angepasst werden soll.",
+      cta: "Website-Hilfe ansehen",
+      href: "/leistungen/website-shop-hilfe",
+      icon: MessageCircle,
+    },
   ];
 
   return (
@@ -77,7 +111,7 @@ export default function Home() {
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.08 }}
             >
               <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Schnelle Website- & Shop-Hilfe für WordPress, Shopify, Wix & Baukästen
+                Websites, Landingpages & Website-Hilfe für Selbstständige und kleine Unternehmen
               </h1>
             </MotionDiv>
             <MotionDiv
@@ -86,9 +120,8 @@ export default function Home() {
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.16 }}
             >
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100">
-                Du kommst bei deiner Website oder deinem Shop nicht weiter? Klickhafen hilft bei kleinen Problemen,
-                Anpassungen, Formularen, mobiler Ansicht, Produkten, Zahlungsarten, Versand, Domains und
-                E-Mail-Verknüpfungen.
+                Klickhafen erstellt moderne Websites und Landingpages mit WordPress oder passenden Baukasten-Systemen
+                und hilft zusätzlich bei bestehenden Websites, Shops, technischen Problemen und SEO-Grundlagen.
               </p>
             </MotionDiv>
             <MotionDiv
@@ -98,14 +131,14 @@ export default function Home() {
               className="mt-8 flex flex-col gap-3 sm:flex-row"
             >
               <ButtonLink href="/kontakt" className="w-full bg-cyan-500 text-slate-950 hover:bg-cyan-300 sm:w-auto">
-                Website-Hilfe anfragen
+                Website-Projekt anfragen
               </ButtonLink>
               <ButtonLink
-                href="/kontakt"
+                href="/leistungen/website-shop-hilfe"
                 variant="secondary"
                 className="w-full border-white/35 bg-white/10 text-white backdrop-blur hover:border-cyan-200 hover:bg-white/15 hover:text-white sm:w-auto"
               >
-                Problem schildern
+                Bestehende Website verbessern
               </ButtonLink>
             </MotionDiv>
             <MotionDiv
@@ -135,18 +168,18 @@ export default function Home() {
             <div className="rounded-lg bg-slate-950/75 p-5 ring-1 ring-white/10">
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="text-sm font-semibold text-cyan-100">Direkte Unterstützung</p>
-                  <p className="mt-3 text-3xl font-semibold tracking-tight text-white">Website-Problem klären</p>
+                  <p className="text-sm font-semibold text-cyan-100">Neue Projekte & bestehende Websites</p>
+                  <p className="mt-3 text-3xl font-semibold tracking-tight text-white">Sauber online auftreten</p>
                   <p className="mt-3 text-sm leading-6 text-slate-200">
-                    Verständliche Hilfe für bestehende Websites, Shops und Baukasten-Systeme.
+                    Von der ersten Landingpage bis zur Verbesserung einer vorhandenen Website.
                   </p>
                 </div>
                 <span className="grid size-12 shrink-0 place-items-center rounded-md bg-cyan-400/15 text-cyan-100">
-                  <Wrench className="size-6" aria-hidden="true" />
+                  <Code className="size-6" aria-hidden="true" />
                 </span>
               </div>
               <div className="mt-6 grid gap-3">
-                {["Anpassungen & kleine Fehler", "Formulare & mobile Ansicht", "Produkte, Zahlung & Versand", "Domains & E-Mail-Verknüpfungen"].map((item) => (
+                {["Websites & Onepager", "Landingpages für Angebote", "WordPress- und Baukasten-Websites", "SEO-Grundlagen & mobile Ansicht"].map((item) => (
                   <div key={item} className="flex items-center gap-3 rounded-md bg-white/10 px-4 py-3 text-sm font-semibold text-slate-50">
                     <CheckCircle className="size-4 shrink-0 text-cyan-200" aria-hidden="true" />
                     <span className="min-w-0 break-words">{item}</span>
@@ -158,7 +191,22 @@ export default function Home() {
         </div>
       </section>
 
-      <Section title="Für bestehende Websites, Shops und Baukasten-Systeme" text="Klickhafen hilft Selbstständigen, kleinen Unternehmen und lokalen Betrieben, wenn vorhandene Systeme haken oder gepflegt werden müssen.">
+      <Section title="Der passende Einstieg für Ihr Website-Projekt" text="Ob neue Website, bessere Struktur oder konkrete Hilfe bei einem bestehenden System: Klickhafen unterstützt verständlich, sauber und online.">
+        <div className="grid gap-5 lg:grid-cols-3">
+          {entryCards.map(({ title, text, cta, href, icon: Icon }) => (
+            <FadeIn key={title} className="flex min-h-full flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <Icon className="size-8 text-cyan-700" aria-hidden="true" />
+              <h2 className="mt-5 text-xl font-semibold text-slate-950">{title}</h2>
+              <p className="mt-3 flex-1 leading-7 text-slate-650">{text}</p>
+              <ButtonLink href={href} variant="secondary" className="mt-6 w-full sm:w-fit">
+                {cta}
+              </ButtonLink>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      <Section className="bg-slate-50" title="Für neue und bestehende Websites, Shops und Baukasten-Systeme" text="Klickhafen hilft Selbstständigen, kleinen Unternehmen und lokalen Betrieben aus Castrop-Rauxel, dem Ruhrgebiet und deutschlandweit bei neuen Websites, Landingpages und bestehenden Website-Problemen.">
         <div className="flex flex-wrap gap-3">
           {systems.slice(0, 13).map((system) => (
             <span key={system} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">{system}</span>
@@ -166,11 +214,11 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section className="bg-slate-50" eyebrow="Regional & online" title="Webdesign, SEO und Website-Hilfe aus Castrop-Rauxel" text="Klickhafen unterstützt lokale Unternehmen in Castrop-Rauxel, Dortmund, Herne, Bochum und im Ruhrgebiet online bei bestehenden Websites, Shops und Baukasten-Systemen. Dazu gehören Webdesign in Castrop-Rauxel, SEO-Optimierung für lokale Sichtbarkeit, responsives Webdesign für Dortmund und WordPress-Wartung für bestehende Projekte. Wer eine Webdesign Agentur in Castrop-Rauxel oder einen Webdesigner in Castrop-Rauxel sucht, bekommt hier keine großen Agenturpakete, sondern direkte Unterstützung für bestehende Seiten.">
+      <Section eyebrow="Regional & online" title="Webdesign, SEO und Website-Hilfe aus Castrop-Rauxel" text="Klickhafen unterstützt lokale Unternehmen in Castrop-Rauxel, Dortmund, Herne, Bochum und im Ruhrgebiet online bei Webdesign, Webentwicklung, SEO-Grundlagen und Website-Pflege. Dazu gehören neue Landingpages, WordPress-Websites, Baukasten-Websites und die Überarbeitung bestehender Seiten.">
         <div className="grid gap-5 md:grid-cols-3">
           {[
             ["SEO Castrop-Rauxel", "Suchmaschinenoptimierung für bestehende Websites mit Fokus auf technische Grundlagen, Inhalte und lokale Auffindbarkeit."],
-            ["Webdesign Castrop-Rauxel", "Saubere Anpassungen, neue Unterseiten und responsive Gestaltung für Selbstständige, kleine Unternehmen und lokale Betriebe."],
+            ["Webdesign Castrop-Rauxel", "Neue Websites, Landingpages, saubere Unterseiten und responsive Gestaltung für Selbstständige, kleine Unternehmen und lokale Betriebe."],
             ["WordPress Wartung Dortmund", "Regelmäßige Pflege, kleine Fehlerbehebungen und übersichtliche Unterstützung für WordPress-Websites im Raum Dortmund."],
           ].map(([title, text]) => (
             <FadeIn key={title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
@@ -194,11 +242,26 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section className="bg-slate-50" eyebrow="Leistungen" title="Hilfe, Pflege und Sichtbarkeit aus einer Hand" text="Die Website- & Shop-Hilfe ist die Hauptleistung. Pflegepakete und SEO können ergänzend geplant werden.">
+      <Section className="bg-slate-50" eyebrow="Leistungen" title="Webdesign, Hilfe, Pflege und Sichtbarkeit aus einer Hand" text="Kleine Anpassungen und größere Projekte sind möglich. Vorab gibt es eine klare Einschätzung, welche Umsetzung zum Ziel passt.">
         <div className="grid gap-5 lg:grid-cols-3">
           {services.map((service) => <ServiceCard key={service.title} {...service} />)}
         </div>
       </Section>
+
+      {references.length ? (
+        <Section title="Ausgewählte Referenzen" text="Ein Blick auf ausgewählte Websites und Projekte, die mit Klickhafen umgesetzt oder betreut wurden.">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {references.map((reference) => (
+              <ReferenceCard key={reference.id} reference={reference} />
+            ))}
+          </div>
+          <div className="mt-8">
+            <ButtonLink href="/referenzen" variant="secondary">
+              Alle Referenzen ansehen
+            </ButtonLink>
+          </div>
+        </Section>
+      ) : null}
 
       <Section title="Typische Probleme, bei denen wir helfen" text="Keine großen Agenturpakete. Keine komplizierte Projektphase. Sie schildern Ihr Problem, wir helfen verständlich und direkt.">
         <CheckList columns items={["Texte und Bilder ändern", "Buttons, Menüs und Footer anpassen", "Kontaktformulare prüfen", "mobile Ansicht verbessern", "Produkte, Zahlung und Versand prüfen", "Domain, E-Mail oder Veröffentlichung begleiten"]} />

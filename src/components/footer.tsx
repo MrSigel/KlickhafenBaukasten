@@ -28,7 +28,7 @@ export function Footer() {
             />
           </Link>
           <p className="mt-4 text-sm leading-6 text-slate-300">
-            Schnelle, verständliche und bezahlbare Website- & Shop-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Systeme.
+            Webdesign, Landingpages und verständliche Website-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Systeme.
           </p>
           <p className="mt-4 text-xs leading-5 text-slate-400">
             Diese Website nutzt Vercel Analytics und Speed Insights zur technischen Analyse und Performance-Messung. Weitere Informationen finden Sie in der Datenschutzerklärung.
@@ -47,9 +47,13 @@ export function Footer() {
         <div>
           <p className="font-semibold">Leistungen</p>
           <div className="mt-4 flex flex-col gap-3">
+            <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Webdesign & Webentwicklung</Link>
+            <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Landingpage erstellen lassen</Link>
+            <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">WordPress-Website erstellen</Link>
             <Link href="/leistungen/website-shop-hilfe" className="text-sm text-slate-300 transition hover:text-white">Website- & Shop-Hilfe</Link>
             <Link href="/leistungen/seo-sichtbarkeit" className="text-sm text-slate-300 transition hover:text-white">SEO & Sichtbarkeit</Link>
-            <Link href="/preise" className="text-sm text-slate-300 transition hover:text-white">Pflegepakete</Link>
+            <Link href="/leistungen/website-pflege" className="text-sm text-slate-300 transition hover:text-white">Website-Pflege</Link>
+            <Link href="/referenzen" className="text-sm text-slate-300 transition hover:text-white">Referenzen</Link>
           </div>
         </div>
         <div>

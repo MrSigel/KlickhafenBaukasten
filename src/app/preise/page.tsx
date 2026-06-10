@@ -8,8 +8,8 @@ import { pageMetadata } from "@/lib/metadata";
 import { carePlans, priceNotes } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Preise | Website-Hilfe ab 29 Euro pro Stunde | Klickhafen",
-  description: "Transparente Preise für Website- & Shop-Hilfe, Pflegepakete, SEO und individuelle Website-Arbeiten.",
+  title: "Preise | Website-Hilfe, Pflege & Website-Projekte | Klickhafen",
+  description: "Transparente Preise für Website-Hilfe, Pflegepakete, SEO-Grundlagen und individuelle Website- oder Landingpage-Projekte.",
   path: "/preise",
 });
 
@@ -35,8 +35,11 @@ export default function PreisePage() {
                 <p className="mt-2 text-sm text-slate-650">Preis nach Absprache</p>
               </div>
               <div className="rounded-lg bg-slate-50 p-5">
-                <h3 className="font-semibold text-slate-950">Individuelle Website-Arbeiten</h3>
-                <p className="mt-2 text-sm text-slate-650">Preis nach Absprache</p>
+                <h3 className="font-semibold text-slate-950">Website- und Landingpage-Projekte</h3>
+                <p className="mt-2 text-sm text-slate-650">Individuell nach Umfang</p>
+                <div className="mt-4">
+                  <ButtonLink href="/leistungen/webdesign-webentwicklung" variant="secondary">Details ansehen</ButtonLink>
+                </div>
               </div>
             </div>
             <div className="mt-6">
@@ -50,7 +53,7 @@ export default function PreisePage() {
           {carePlans.map((plan) => <PricingCard key={plan.name} {...plan} />)}
         </div>
       </Section>
-      <Section title="Zahlungsarten und Fixpreis-Projekte" text="Bei größeren Aufgaben kann vorab ein Angebot erstellt werden. Angebote sind 7 Tage gültig.">
+      <Section title="Zahlungsarten und Fixpreis-Projekte" text="Bei neuen Websites, Landingpages und größeren Aufgaben kann vorab ein individuelles Angebot erstellt werden. Angebote sind 7 Tage gültig.">
         <div className="grid gap-5 lg:grid-cols-2">
           <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
             <CreditCard className="size-7 text-cyan-700" />

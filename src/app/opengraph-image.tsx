@@ -24,8 +24,8 @@ export default function Image() {
             <div style={{ fontSize: 34, fontWeight: 700 }}>Klickhafen</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 62, fontWeight: 800, lineHeight: 1.08, maxWidth: 930 }}>Website- & Shop-Hilfe für WordPress, Shopify, Wix & Baukästen</div>
-            <div style={{ marginTop: 28, fontSize: 30, color: "#0e7490", fontWeight: 700 }}>29 Euro pro Stunde</div>
+            <div style={{ fontSize: 62, fontWeight: 800, lineHeight: 1.08, maxWidth: 980 }}>Webdesign, Landingpages & Website-Hilfe</div>
+            <div style={{ marginTop: 28, fontSize: 30, color: "#0e7490", fontWeight: 700 }}>WordPress, Baukasten-Systeme & SEO-Grundlagen</div>
           </div>
         </div>
       </div>

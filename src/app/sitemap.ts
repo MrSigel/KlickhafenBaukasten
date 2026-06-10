@@ -4,6 +4,7 @@ import { site } from "@/lib/site";
 const routes = [
   "/",
   "/leistungen",
+  "/leistungen/webdesign-webentwicklung",
   "/leistungen/website-shop-hilfe",
   "/leistungen/seo-sichtbarkeit",
   "/leistungen/wordpress-hilfe",
@@ -13,6 +14,7 @@ const routes = [
   "/leistungen/baukasten-hilfe",
   "/leistungen/website-pflege",
   "/preise",
+  "/referenzen",
   "/warum-klickhafen",
   "/kontakt",
   "/impressum",

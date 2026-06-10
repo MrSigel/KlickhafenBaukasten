@@ -49,6 +49,7 @@ export default function WarumPage() {
             <p className="mt-4 max-w-4xl leading-7 text-slate-650">Vorhandene Google-Bewertungen können erwähnt und eingesehen werden. Auf dieser Website werden keine Bewertungen, Kundendaten oder Referenzen erfunden.</p>
             <div className="mt-6">
               <ButtonLink href="/kontakt">Kontakt aufnehmen</ButtonLink>
+              <ButtonLink href="/referenzen" variant="secondary" className="ml-0 mt-3 w-full sm:ml-3 sm:mt-0 sm:w-auto">Referenzen ansehen</ButtonLink>
             </div>
           </div>
         </div>

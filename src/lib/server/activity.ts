@@ -2,7 +2,7 @@ import { getSupabaseAdmin } from "@/lib/server/supabase";
 
 type ActivityInput = {
   action: "created" | "updated" | "deleted";
-  entityType: "inquiry" | "customer" | "offer" | "invoice" | "settings";
+  entityType: "inquiry" | "customer" | "offer" | "invoice" | "settings" | "reference";
   entityId?: string | null;
   title?: string | null;
   description?: string | null;

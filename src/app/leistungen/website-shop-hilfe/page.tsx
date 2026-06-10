@@ -49,6 +49,7 @@ export default function WebsiteShopHilfePage() {
         <RelatedLinks
           links={[
             { label: "WordPress-Hilfe", href: "/leistungen/wordpress-hilfe" },
+            { label: "Webdesign & Webentwicklung", href: "/leistungen/webdesign-webentwicklung" },
             { label: "Shopify-Hilfe", href: "/leistungen/shopify-hilfe" },
             { label: "Wix-Hilfe", href: "/leistungen/wix-hilfe" },
             { label: "WooCommerce-Hilfe", href: "/leistungen/woocommerce-hilfe" },
