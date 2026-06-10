@@ -2,8 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import chromium from "@sparticuz/chromium";
-import { chromium as playwrightChromium } from "playwright";
 import { isAdminAuthenticated } from "@/lib/server/admin-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { logActivity } from "@/lib/server/activity";
@@ -60,7 +58,7 @@ export async function createReferenceAction(formData: FormData) {
       metadata: { url: data.url },
     });
 
-    const screenshot = await createAndStoreScreenshot(data.id, data.url);
+    const screenshot = await createScreenshot(data.id, data.url);
     revalidateReferences();
 
     if (!screenshot.ok) {
@@ -86,7 +84,7 @@ export async function updateReferenceAction(formData: FormData) {
     if (error) throw new Error("Die Referenz konnte nicht aktualisiert werden.");
 
     if (!current?.screenshot_url || current.url !== payload.url) {
-      await createAndStoreScreenshot(id, payload.url);
+      await createScreenshot(id, payload.url);
     }
 
     await logActivity({
@@ -135,54 +133,16 @@ export async function generateReferenceScreenshotAction(formData: FormData) {
   const url = String(formData.get("url") || "");
   if (!id) adminRedirect("Referenz-ID fehlt.", "error");
 
-  const result = await createAndStoreScreenshot(id, url);
+  const result = await createScreenshot(id, url);
   revalidateReferences();
 
   if (!result.ok) adminRedirect(result.error, "error");
   adminRedirect("Screenshot wurde neu erstellt.");
 }
 
-async function createAndStoreScreenshot(id: string, rawUrl: string): Promise<ScreenshotResult> {
-  let browser: Awaited<ReturnType<typeof playwrightChromium.launch>> | null = null;
-
-  try {
-    const url = normalizeUrl(rawUrl);
-    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_REGION);
-
-    if (isServerless) {
-      browser = await playwrightChromium.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath(),
-        headless: true,
-      });
-    } else {
-      browser = await playwrightChromium.launch({ headless: true });
-    }
-
-    const page = await browser.newPage({ viewport: { width: 1200, height: 800 }, deviceScaleFactor: 1 });
-    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-    const buffer = await page.screenshot({ type: "png", fullPage: false });
-    await browser.close();
-    browser = null;
-
-    const supabase = getSupabaseAdmin();
-    const path = `reference-${id}.png`;
-    const { error: uploadError } = await supabase.storage
-      .from("reference-screenshots")
-      .upload(path, buffer, { contentType: "image/png", upsert: true });
-
-    if (uploadError) {
-      return { ok: false, error: "Screenshot wurde erstellt, konnte aber nicht in Supabase Storage gespeichert werden." };
-    }
-
-    const { data } = supabase.storage.from("reference-screenshots").getPublicUrl(path);
-    await supabase.from("references").update({ screenshot_url: data.publicUrl }).eq("id", id);
-    return { ok: true, screenshotUrl: data.publicUrl };
-  } catch {
-    return { ok: false, error: "Die Website war nicht erreichbar oder der Screenshot konnte nicht erstellt werden." };
-  } finally {
-    if (browser) await browser.close().catch(() => undefined);
-  }
+async function createScreenshot(id: string, rawUrl: string): Promise<ScreenshotResult> {
+  const { createAndStoreReferenceScreenshot } = await import("@/lib/server/reference-screenshot");
+  return createAndStoreReferenceScreenshot(id, rawUrl);
 }
 
 function revalidateReferences() {
