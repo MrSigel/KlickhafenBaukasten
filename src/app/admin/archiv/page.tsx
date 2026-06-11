@@ -16,6 +16,7 @@ const entityLabels: Record<string, string> = {
   invoice: "Rechnung",
   settings: "Einstellungen",
   reference: "Referenz",
+  post: "Beitrag",
 };
 
 const actionIcons = {

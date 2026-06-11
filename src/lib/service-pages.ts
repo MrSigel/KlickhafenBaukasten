@@ -74,6 +74,9 @@ export const servicePages: ServicePage[] = [
     ],
     related: [
       { label: "Webdesign & Webentwicklung", href: "/leistungen/webdesign-webentwicklung" },
+      { label: "Kontaktformular funktioniert nicht", href: "/ratgeber/wordpress-kontaktformular-funktioniert-nicht" },
+      { label: "WordPress mobil optimieren", href: "/ratgeber/wordpress-website-mobil-optimieren" },
+      { label: "Elementor-Seite bearbeiten lassen", href: "/ratgeber/elementor-seite-bearbeiten-lassen" },
       { label: "WooCommerce-Hilfe", href: "/leistungen/woocommerce-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
       { label: "SEO & Sichtbarkeit", href: "/leistungen/seo-sichtbarkeit" },
@@ -110,6 +113,8 @@ export const servicePages: ServicePage[] = [
       "SEO-Grundlagen für Shopify prüfen",
     ],
     related: [
+      { label: "Shopify-Produkte einpflegen", href: "/ratgeber/shopify-produkte-einpflegen" },
+      { label: "Zahlungsarten und Versand prüfen", href: "/ratgeber/shopify-zahlungsarten-versand-pruefen" },
       { label: "Website- & Shop-Hilfe", href: "/leistungen/website-shop-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
       { label: "SEO & Sichtbarkeit", href: "/leistungen/seo-sichtbarkeit" },
@@ -141,6 +146,7 @@ export const servicePages: ServicePage[] = [
       "kleine Darstellungsprobleme beheben",
     ],
     related: [
+      { label: "Wix-Website bearbeiten lassen", href: "/ratgeber/wix-website-bearbeiten-lassen" },
       { label: "Baukasten-Hilfe", href: "/leistungen/baukasten-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
       { label: "SEO & Sichtbarkeit", href: "/leistungen/seo-sichtbarkeit" },
@@ -173,6 +179,7 @@ export const servicePages: ServicePage[] = [
       "SEO-Grundlagen für Produktseiten prüfen",
     ],
     related: [
+      { label: "WooCommerce-Checkout funktioniert nicht", href: "/ratgeber/woocommerce-checkout-funktioniert-nicht" },
       { label: "WordPress-Hilfe", href: "/leistungen/wordpress-hilfe" },
       { label: "Shopify-Hilfe", href: "/leistungen/shopify-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
@@ -206,6 +213,8 @@ export const servicePages: ServicePage[] = [
     ],
     related: [
       { label: "Webdesign & Webentwicklung", href: "/leistungen/webdesign-webentwicklung" },
+      { label: "IONOS Baukasten überarbeiten", href: "/ratgeber/ionos-website-baukasten-ueberarbeiten" },
+      { label: "Strato Baukasten Hilfe", href: "/ratgeber/strato-website-baukasten-hilfe" },
       { label: "Wix-Hilfe", href: "/leistungen/wix-hilfe" },
       { label: "Website-Pflege", href: "/leistungen/website-pflege" },
       { label: "SEO & Sichtbarkeit", href: "/leistungen/seo-sichtbarkeit" },

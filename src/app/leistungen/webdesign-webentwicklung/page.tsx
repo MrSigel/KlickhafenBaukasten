@@ -245,9 +245,17 @@ export default function WebdesignWebentwicklungPage() {
         </div>
       </Section>
 
-      <Section className="bg-slate-50" title="Preise" text="Der Preis richtet sich nach Umfang, System und gewünschter Umsetzung. Kleinere Anpassungen können stundenbasiert abgerechnet werden, komplette Websites und Landingpages werden individuell besprochen.">
+      <Section className="bg-slate-50" title="Preise" text="Der Preis richtet sich nach Umfang, System und gewünschter Umsetzung. Nach einer kurzen Einschätzung kann ein individuelles Angebot erstellt werden.">
         <div className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
           <CheckList items={["klare Einschätzung vorab", "individuelle Umsetzung je nach Umfang", "kleine Anpassungen und größere Projekte möglich", "Angebot nach kurzer Abstimmung"]} />
+        </div>
+      </Section>
+
+      <Section title="Passende Ratgeber" text="Weitere Orientierung zu Landingpages, Domains und technischen Grundlagen.">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ButtonLink href="/ratgeber/landingpage-erstellen-lassen" variant="secondary">Landingpage erstellen lassen</ButtonLink>
+          <ButtonLink href="/ratgeber/domain-mit-website-verbinden" variant="secondary">Domain verbinden</ButtonLink>
+          <ButtonLink href="/kontakt" variant="secondary">Kontakt aufnehmen</ButtonLink>
         </div>
       </Section>
 

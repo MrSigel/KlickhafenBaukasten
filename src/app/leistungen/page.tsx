@@ -56,6 +56,7 @@ export default function LeistungenPage() {
             <div className="mt-6">
               <ButtonLink href="/leistungen/webdesign-webentwicklung">Webdesign & Webentwicklung ansehen</ButtonLink>
               <ButtonLink href="/referenzen" variant="secondary" className="ml-0 mt-3 w-full sm:ml-3 sm:mt-0 sm:w-auto">Referenzen ansehen</ButtonLink>
+              <ButtonLink href="/ratgeber" variant="secondary" className="ml-0 mt-3 w-full sm:ml-3 sm:mt-0 sm:w-auto">Ratgeber lesen</ButtonLink>
             </div>
           </div>
         </div>

@@ -50,9 +50,14 @@ export function Footer() {
             <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Webdesign & Webentwicklung</Link>
             <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Landingpage erstellen lassen</Link>
             <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">WordPress-Website erstellen</Link>
+            <Link href="/leistungen/wordpress-hilfe" className="text-sm text-slate-300 transition hover:text-white">WordPress-Hilfe</Link>
+            <Link href="/leistungen/shopify-hilfe" className="text-sm text-slate-300 transition hover:text-white">Shopify-Hilfe</Link>
+            <Link href="/leistungen/wix-hilfe" className="text-sm text-slate-300 transition hover:text-white">Wix-Hilfe</Link>
+            <Link href="/leistungen/woocommerce-hilfe" className="text-sm text-slate-300 transition hover:text-white">WooCommerce-Hilfe</Link>
             <Link href="/leistungen/website-shop-hilfe" className="text-sm text-slate-300 transition hover:text-white">Website- & Shop-Hilfe</Link>
             <Link href="/leistungen/seo-sichtbarkeit" className="text-sm text-slate-300 transition hover:text-white">SEO & Sichtbarkeit</Link>
             <Link href="/leistungen/website-pflege" className="text-sm text-slate-300 transition hover:text-white">Website-Pflege</Link>
+            <Link href="/ratgeber" className="text-sm text-slate-300 transition hover:text-white">Ratgeber</Link>
             <Link href="/referenzen" className="text-sm text-slate-300 transition hover:text-white">Referenzen</Link>
           </div>
         </div>

@@ -136,11 +136,11 @@ export default async function Home() {
                 Website-Projekt anfragen
               </ButtonLink>
               <ButtonLink
-                href="/leistungen/website-shop-hilfe"
+                href="/kontakt"
                 variant="secondary"
                 className="w-full border-white/35 bg-white/10 text-white backdrop-blur hover:border-cyan-200 hover:bg-white/15 hover:text-white sm:w-auto"
               >
-                Bestehende Website verbessern
+                Website-Problem schildern
               </ButtonLink>
             </MotionDiv>
             <MotionDiv
@@ -264,6 +264,23 @@ export default async function Home() {
           </div>
         </Section>
       ) : null}
+
+      <Section className="bg-slate-50" title="Ratgeber für typische Website-Probleme" text="Verständliche Hinweise zu WordPress, Shopify, Wix, WooCommerce, Domains, Landingpages und SEO-Grundlagen.">
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            ["WordPress-Kontaktformular funktioniert nicht", "/ratgeber/wordpress-kontaktformular-funktioniert-nicht"],
+            ["Landingpage erstellen lassen", "/ratgeber/landingpage-erstellen-lassen"],
+            ["Website mit Google Search Console verbinden", "/ratgeber/website-mit-google-search-console-verbinden"],
+          ].map(([title, href]) => (
+            <ButtonLink key={href} href={href} variant="secondary" className="w-full justify-between">
+              {title} <ArrowRight className="ml-2 size-4" />
+            </ButtonLink>
+          ))}
+        </div>
+        <div className="mt-6">
+          <ButtonLink href="/ratgeber">Alle Ratgeber ansehen</ButtonLink>
+        </div>
+      </Section>
 
       <Section title="Typische Probleme, bei denen wir helfen" text="Keine großen Agenturpakete. Keine komplizierte Projektphase. Sie schildern Ihr Problem, wir helfen verständlich und direkt.">
         <CheckList columns items={["Texte und Bilder ändern", "Buttons, Menüs und Footer anpassen", "Kontaktformulare prüfen", "mobile Ansicht verbessern", "Produkte, Zahlung und Versand prüfen", "Domain, E-Mail oder Veröffentlichung begleiten"]} />
