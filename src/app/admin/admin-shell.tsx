@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Archive, ExternalLink, FileText, Home, Images, Inbox, LogOut, Receipt, Settings, Users } from "lucide-react";
+import { Archive, FileText, Home, Images, Inbox, LogOut, Receipt, Settings, Users } from "lucide-react";
 import { logoutAction } from "./actions";
+import { ConfirmWebsiteLink } from "./confirm-website-link";
 
 const crmItems = [
   { href: "/admin", label: "Dashboard", icon: Home },
@@ -13,7 +14,6 @@ const crmItems = [
 
 const systemItems = [
   { href: "/admin/archiv", label: "Archiv", icon: Archive },
-  { href: "/", label: "Website", icon: ExternalLink },
   { href: "/admin/einstellungen", label: "Einstellungen", icon: Settings },
 ];
 
@@ -41,6 +41,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               </Link>
             );
           })}
+          <ConfirmWebsiteLink />
           <form action={logoutAction}>
             <button className="flex w-full items-center gap-3 rounded-md bg-red-600/15 px-3 py-3 text-sm font-semibold text-red-100 ring-1 ring-red-500/30 transition hover:bg-red-600 hover:text-white">
               <LogOut className="size-4" /> Logout
