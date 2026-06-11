@@ -38,6 +38,7 @@ function readPostForm(formData: FormData) {
 
 export async function createPostAction(formData: FormData) {
   await requireAdmin();
+  let redirectPath = "/admin/beitraege";
   try {
     const payload = readPostForm(formData);
     const { data, error } = await getSupabaseAdmin().from("posts").insert(payload).select("id, title").single();
@@ -45,10 +46,11 @@ export async function createPostAction(formData: FormData) {
 
     await logActivity({ action: "created", entityType: "post", entityId: data.id, title: "Beitrag erstellt", description: data.title });
     revalidatePath("/admin/beitraege");
-    adminRedirect(`/admin/beitraege/${data.id}`, "Beitrag wurde gespeichert.");
+    redirectPath = `/admin/beitraege/${data.id}`;
   } catch (error) {
     adminRedirect("/admin/beitraege/neu", error instanceof Error ? error.message : "Der Beitrag konnte nicht gespeichert werden.", "error");
   }
+  adminRedirect(redirectPath, "Beitrag wurde gespeichert.");
 }
 
 export async function updatePostAction(formData: FormData) {
@@ -64,10 +66,10 @@ export async function updatePostAction(formData: FormData) {
     await logActivity({ action: "updated", entityType: "post", entityId: id, title: "Beitrag aktualisiert", description: payload.title });
     revalidatePath("/admin/beitraege");
     revalidatePath(`/admin/beitraege/${id}`);
-    adminRedirect(`/admin/beitraege/${id}`, "Beitrag wurde aktualisiert.");
   } catch (error) {
     adminRedirect(`/admin/beitraege/${id}`, error instanceof Error ? error.message : "Der Beitrag konnte nicht aktualisiert werden.", "error");
   }
+  adminRedirect(`/admin/beitraege/${id}`, "Beitrag wurde aktualisiert.");
 }
 
 export async function archivePostAction(formData: FormData) {

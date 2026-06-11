@@ -46,10 +46,10 @@ export async function createFacebookGroupAction(formData: FormData) {
     if (error || !data) throw new Error("Die Facebook-Gruppe konnte nicht gespeichert werden.");
     await logActivity({ action: "created", entityType: "facebook_group", entityId: data.id, title: "Facebook-Gruppe erstellt", description: data.name });
     revalidatePath("/admin/beitraege");
-    adminRedirect("/admin/beitraege", "Facebook-Gruppe wurde gespeichert.");
   } catch (error) {
     adminRedirect("/admin/beitraege", error instanceof Error ? error.message : "Die Facebook-Gruppe konnte nicht gespeichert werden.", "error");
   }
+  adminRedirect("/admin/beitraege", "Facebook-Gruppe wurde gespeichert.");
 }
 
 export async function updateFacebookGroupAction(formData: FormData) {
@@ -62,10 +62,10 @@ export async function updateFacebookGroupAction(formData: FormData) {
     if (error) throw new Error("Die Facebook-Gruppe konnte nicht aktualisiert werden.");
     await logActivity({ action: "updated", entityType: "facebook_group", entityId: id, title: "Facebook-Gruppe aktualisiert", description: payload.name });
     revalidatePath("/admin/beitraege");
-    adminRedirect("/admin/beitraege", "Facebook-Gruppe wurde aktualisiert.");
   } catch (error) {
     adminRedirect("/admin/beitraege", error instanceof Error ? error.message : "Die Facebook-Gruppe konnte nicht aktualisiert werden.", "error");
   }
+  adminRedirect("/admin/beitraege", "Facebook-Gruppe wurde aktualisiert.");
 }
 
 export async function archiveFacebookGroupAction(formData: FormData) {
