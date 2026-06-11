@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileDown } from "lucide-react";
+import { Download, FileDown } from "lucide-react";
 import { AdminHeader, Money, StatusBadge } from "@/components/admin/ui";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { AdminGuard } from "../../guard";
@@ -30,7 +30,10 @@ function DocumentActions({ href, backHref }: { href: string; backHref: string })
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
       <a href={href} className="inline-flex min-h-10 items-center justify-center rounded-md bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800">
-        <FileDown className="mr-2 size-4" /> PDF herunterladen
+        <FileDown className="mr-2 size-4" /> PDF generieren
+      </a>
+      <a href={href} download className="inline-flex min-h-10 items-center justify-center rounded-md border border-cyan-700 bg-white px-4 py-2 text-sm font-semibold text-cyan-800 hover:bg-cyan-50">
+        <Download className="mr-2 size-4" /> PDF herunterladen
       </a>
       <Link href={backHref} className="inline-flex min-h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-950 hover:border-cyan-700 hover:text-cyan-800">
         Zurück zur Übersicht
