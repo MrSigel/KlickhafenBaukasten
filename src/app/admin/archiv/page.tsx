@@ -17,6 +17,7 @@ const entityLabels: Record<string, string> = {
   settings: "Einstellungen",
   reference: "Referenz",
   post: "Beitrag",
+  facebook_group: "Facebook-Gruppe",
 };
 
 const actionIcons = {
