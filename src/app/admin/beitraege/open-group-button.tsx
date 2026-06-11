@@ -19,7 +19,7 @@ export function OpenGroupButton({ id, url }: { id: string; url: string }) {
       className="inline-flex min-h-10 items-center justify-center rounded-md bg-cyan-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-800"
     >
       <ExternalLink className="mr-2 size-4" aria-hidden="true" />
-      Öffnen
+      Facebook-Gruppe öffnen
     </button>
   );
 }
