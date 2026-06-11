@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languageAlternates } from "./i18n";
 import { site } from "./site";
 
 type MetaInput = {
@@ -9,17 +10,19 @@ type MetaInput = {
 
 export function pageMetadata({ title, description, path = "/" }: MetaInput): Metadata {
   const url = new URL(path, site.url).toString();
+  const alternates = languageAlternates(path);
+  const isEnglish = path === "/en" || path.startsWith("/en/");
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates,
     openGraph: {
       title,
       description,
       url,
       siteName: site.name,
-      locale: "de_DE",
+      locale: isEnglish ? "en_US" : "de_DE",
       type: "website",
       images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${site.name} Website-Hilfe` }],
     },

@@ -1,36 +1,25 @@
 import type { MetadataRoute } from "next";
-import { guidePages } from "@/lib/guide-pages";
+import { allPublicDePaths, allPublicEnPaths, alternateFor, isEnglishPath } from "@/lib/i18n";
 import { site } from "@/lib/site";
 
-const routes = [
-  "/",
-  "/leistungen",
-  "/leistungen/webdesign-webentwicklung",
-  "/leistungen/website-shop-hilfe",
-  "/leistungen/seo-sichtbarkeit",
-  "/leistungen/wordpress-hilfe",
-  "/leistungen/shopify-hilfe",
-  "/leistungen/wix-hilfe",
-  "/leistungen/woocommerce-hilfe",
-  "/leistungen/baukasten-hilfe",
-  "/leistungen/website-pflege",
-  "/preise",
-  "/referenzen",
-  "/warum-klickhafen",
-  "/kontakt",
-  "/impressum",
-  "/datenschutz",
-  "/cookies",
-  "/agb",
-  "/widerruf",
-];
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  const guideRoutes = ["/ratgeber", ...guidePages.map((page) => `/ratgeber/${page.slug}`)];
-  return routes.concat(guideRoutes).map((route) => ({
+  const routes: string[] = [...allPublicDePaths(), ...allPublicEnPaths()];
+  return routes.map((route) => {
+    const dePath = isEnglishPath(route) ? alternateFor(route, "de") : route;
+    const enPath = isEnglishPath(route) ? route : alternateFor(route, "en");
+
+    return {
     url: `${site.url}${route}`,
     lastModified: new Date("2026-06-11"),
-    changeFrequency: route === "/" || route.startsWith("/ratgeber") ? "weekly" : "monthly",
-    priority: route === "/" ? 1 : route === "/ratgeber" ? 0.85 : route.startsWith("/ratgeber/") ? 0.75 : 0.7,
-  }));
+      changeFrequency: route === "/" || route === "/en" || route.includes("ratgeber") || route.includes("guides") ? "weekly" : "monthly",
+      priority: route === "/" || route === "/en" ? 1 : route === "/ratgeber" || route === "/en/guides" ? 0.85 : route.includes("ratgeber/") || route.includes("guides/") ? 0.75 : 0.7,
+      alternates: {
+        languages: {
+          de: `${site.url}${dePath}`,
+          en: `${site.url}${enPath}`,
+          "x-default": `${site.url}/`,
+        },
+      },
+    };
+  });
 }

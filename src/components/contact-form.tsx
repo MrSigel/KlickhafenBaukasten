@@ -16,6 +16,19 @@ const services = [
   "Sonstiges",
 ];
 
+const servicesEn = [
+  "Website project",
+  "Website & shop help",
+  "WordPress support",
+  "Shopify support",
+  "Wix / website builder support",
+  "WooCommerce support",
+  "Maintenance package",
+  "SEO & visibility",
+  "Custom website work",
+  "Other",
+];
+
 const platforms = [
   "WordPress",
   "Elementor",
@@ -46,7 +59,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 const inputClass =
   "w-full rounded-md border border-slate-300 bg-white px-3 py-3 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-700 focus:ring-4 focus:ring-cyan-100";
 
-export function ContactForm() {
+export function ContactForm({ locale = "de" }: { locale?: "de" | "en" }) {
+  const isEnglish = locale === "en";
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -62,7 +76,13 @@ export function ContactForm() {
     const result = (await response.json()) as { ok: boolean; message: string };
 
     setStatus(result.ok ? "success" : "error");
-    setMessage(result.message);
+    setMessage(
+      isEnglish
+        ? result.ok
+          ? "Thank you. Your request has been sent successfully. I will get back to you soon."
+          : "The request could not be sent right now. Please contact me directly by email."
+        : result.message,
+    );
 
     if (result.ok) {
       event.currentTarget.reset();
@@ -72,50 +92,50 @@ export function ContactForm() {
   return (
     <form onSubmit={submit} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Anrede">
+        <Field label={isEnglish ? "Salutation" : "Anrede"}>
           <select className={inputClass} name="anrede">
-            <option>Bitte wählen</option>
-            <option>Frau</option>
-            <option>Herr</option>
-            <option>Divers</option>
-            <option>Keine Angabe</option>
+            <option>{isEnglish ? "Please select" : "Bitte wählen"}</option>
+            <option>{isEnglish ? "Ms" : "Frau"}</option>
+            <option>{isEnglish ? "Mr" : "Herr"}</option>
+            <option>{isEnglish ? "Diverse" : "Divers"}</option>
+            <option>{isEnglish ? "No preference" : "Keine Angabe"}</option>
           </select>
         </Field>
-        <Field label="Unternehmen optional">
+        <Field label={isEnglish ? "Company optional" : "Unternehmen optional"}>
           <input className={inputClass} name="unternehmen" autoComplete="organization" />
         </Field>
-        <Field label="Vorname">
+        <Field label={isEnglish ? "First name" : "Vorname"}>
           <input className={inputClass} name="vorname" autoComplete="given-name" required />
         </Field>
-        <Field label="Nachname">
+        <Field label={isEnglish ? "Last name" : "Nachname"}>
           <input className={inputClass} name="nachname" autoComplete="family-name" required />
         </Field>
         <Field label="E-Mail">
           <input className={inputClass} type="email" name="email" autoComplete="email" required />
         </Field>
-        <Field label="Website-URL optional">
+        <Field label={isEnglish ? "Website URL optional" : "Website-URL optional"}>
           <input className={inputClass} type="url" name="website" placeholder="https://" />
         </Field>
-        <Field label="Gewünschte Leistung">
+        <Field label={isEnglish ? "Requested service" : "Gewünschte Leistung"}>
           <select className={inputClass} name="leistung">
-            {services.map((service) => (
+            {(isEnglish ? servicesEn : services).map((service) => (
               <option key={service}>{service}</option>
             ))}
           </select>
         </Field>
-        <Field label="System / Plattform">
+        <Field label={isEnglish ? "System / platform" : "System / Plattform"}>
           <select className={inputClass} name="system">
             {platforms.map((platform) => (
               <option key={platform}>{platform}</option>
             ))}
           </select>
         </Field>
-        <Field label="Datei-Upload optional">
+        <Field label={isEnglish ? "File upload optional" : "Datei-Upload optional"}>
           <input className={`${inputClass} file:mr-4 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-slate-800`} type="file" name="datei" />
         </Field>
       </div>
       <div className="mt-5">
-        <Field label="Nachricht / Problem-Beschreibung">
+        <Field label={isEnglish ? "Message / project description" : "Nachricht / Problem-Beschreibung"}>
           <textarea className={`${inputClass} min-h-40 resize-y`} name="nachricht" required />
         </Field>
       </div>
@@ -130,7 +150,7 @@ export function ContactForm() {
         whileTap={{ scale: 0.98 }}
         className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-cyan-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
       >
-        {status === "loading" ? "Anfrage wird gesendet" : "Anfrage senden"} <Send className="size-4" aria-hidden="true" />
+        {status === "loading" ? (isEnglish ? "Sending request" : "Anfrage wird gesendet") : isEnglish ? "Send request" : "Anfrage senden"} <Send className="size-4" aria-hidden="true" />
       </motion.button>
     </form>
   );
