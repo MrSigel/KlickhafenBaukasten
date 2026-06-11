@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { MotionProvider } from "@/components/motion-provider";
 import { SiteChrome } from "@/components/site-chrome";
 import { site } from "@/lib/site";
@@ -84,8 +82,6 @@ export default function RootLayout({
         <MotionProvider>
           <SiteChrome>{children}</SiteChrome>
         </MotionProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

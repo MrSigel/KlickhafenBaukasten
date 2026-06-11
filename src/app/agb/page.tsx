@@ -66,6 +66,7 @@ export default function AgbPage() {
       </LegalSection>
       <LegalSection title="Schlussbestimmungen">
         <p>Es gilt deutsches Recht, soweit gesetzlich zulässig. Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Regelungen unberührt.</p>
+        <p>Stand: 11. Juni 2026</p>
       </LegalSection>
     </LegalPage>
   );

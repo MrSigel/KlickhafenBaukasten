@@ -19,6 +19,7 @@ const links = [
   "Kontakt und Kundendaten",
   "Hosting und Vercel",
   "Cookies und Consent",
+  "Analyse und Performance",
   "Sicherheit",
   "Weitergabe und Drittanbieter",
   "Änderungen",
@@ -51,12 +52,18 @@ export default function DatenschutzPage() {
       </LegalSection>
       <LegalSection title="Hosting und Vercel">
         <p>Die Website ist für den Betrieb auf Vercel vorgesehen. Beim Aufruf können technisch notwendige Zugriffsdaten verarbeitet werden, zum Beispiel IP-Adresse, Zeitpunkt, Browserinformationen, angeforderte URL und übertragene Datenmenge.</p>
-        <p>Vercel Analytics und Vercel Speed Insights dienen der technischen Analyse, Performance-Messung, Auswertung von Seitenaufrufen und Ladegeschwindigkeit. Diese optionalen Dienste werden auf dieser Website erst geladen, wenn die Kategorie „Analyse & Performance“ akzeptiert wurde.</p>
+        <p>Hosting- und Sicherheitsdaten werden verarbeitet, damit die Website ausgeliefert, geschützt und technisch betrieben werden kann. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>
         <p>Weitere Informationen finden Sie in den Datenschutzhinweisen von Vercel als externem Anbieter.</p>
       </LegalSection>
       <LegalSection title="Cookies und Consent">
-        <p>Notwendige Technologien werden genutzt, damit die Website technisch funktioniert, etwa für Darstellung, Sicherheit und die Speicherung der Cookie-Auswahl. Optionale Analyse- und Performance-Dienste können im Cookie-Banner aktiviert oder abgelehnt werden.</p>
-        <p>Die Cookie-Auswahl wird im Browser gespeichert und kann über „Cookie-Einstellungen“ im Footer nachträglich geändert werden. Es werden keine eigenen Marketing-Cookies eingesetzt. Es wird kein Google Analytics, kein Meta Pixel und kein TikTok Pixel verwendet.</p>
+        <p>Notwendige Technologien werden genutzt, damit die Website technisch funktioniert, etwa für Darstellung, Sicherheit und die Speicherung der Cookie-Auswahl im Browser. Diese Speicherung ist erforderlich, damit die getroffene Auswahl berücksichtigt werden kann.</p>
+        <p>Optionale Analyse- und Performance-Dienste werden erst geladen, wenn im Cookie-Banner die Kategorie „Analyse & Performance“ akzeptiert wurde. Die Auswahl kann über „Cookie-Einstellungen“ im Footer nachträglich geändert werden.</p>
+        <p>Es werden keine eigenen Marketing-Cookies eingesetzt. Es wird kein Google Analytics, kein Meta Pixel und kein TikTok Pixel verwendet.</p>
+      </LegalSection>
+      <LegalSection title="Analyse und Performance">
+        <p>Bei Zustimmung werden Vercel Analytics und Vercel Speed Insights geladen. Vercel Analytics dient der anonymisierten Auswertung von Seitenaufrufen und nutzt nach Angaben von Vercel keine Cookies. Vercel Speed Insights dient der anonymisierten Messung technischer Performance-Werte wie Core Web Vitals.</p>
+        <p>Rechtsgrundlage für das Laden dieser optionalen Dienste ist Ihre Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO. Soweit Informationen im Endgerät gespeichert oder ausgelesen werden, erfolgt dies nach Ihrer Einwilligung gemäß § 25 TDDDG, soweit keine gesetzliche Ausnahme für technisch erforderliche Vorgänge greift.</p>
+        <p>Weitere Informationen: <a className="font-semibold text-cyan-800" href="https://vercel.com/docs/analytics/privacy-policy">Vercel Web Analytics Privacy</a> und <a className="font-semibold text-cyan-800" href="https://vercel.com/docs/speed-insights/privacy-policy">Vercel Speed Insights Privacy</a>.</p>
       </LegalSection>
       <LegalSection title="Sicherheit">
         <p>Die Website nutzt technische und organisatorische Maßnahmen zum Schutz personenbezogener Daten. Dazu gehört insbesondere eine SSL-/TLS-verschlüsselte Übertragung, soweit die Website über HTTPS aufgerufen wird.</p>
@@ -66,6 +73,7 @@ export default function DatenschutzPage() {
       </LegalSection>
       <LegalSection title="Änderungen">
         <p>Diese Datenschutzerklärung kann angepasst werden, wenn sich technische, rechtliche oder organisatorische Anforderungen ändern.</p>
+        <p>Stand: 11. Juni 2026</p>
       </LegalSection>
     </LegalPage>
   );

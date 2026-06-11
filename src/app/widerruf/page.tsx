@@ -50,6 +50,7 @@ export default function WiderrufPage() {
           <p>Anschrift des Verbrauchers:</p>
           <p>Datum:</p>
         </div>
+        <p className="mt-4 text-sm text-slate-600">Stand: 11. Juni 2026</p>
       </LegalSection>
     </LegalPage>
   );

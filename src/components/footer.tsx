@@ -31,7 +31,7 @@ export function Footer() {
             Webdesign, Landingpages und verständliche Website-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Systeme.
           </p>
           <p className="mt-4 text-xs leading-5 text-slate-400">
-            Diese Website nutzt Vercel Analytics und Speed Insights zur technischen Analyse und Performance-Messung. Weitere Informationen finden Sie in der Datenschutzerklärung.
+            Optionale Analyse- und Performance-Dienste werden nur nach Zustimmung geladen. Weitere Informationen finden Sie in der Datenschutzerklärung.
           </p>
         </div>
         <div>

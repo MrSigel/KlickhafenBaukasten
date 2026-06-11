@@ -25,7 +25,7 @@ export default function ImpressumPage() {
       </LegalSection>
       <LegalSection title="Kontakt">
         <p>E-Mail: <a className="font-semibold text-cyan-800" href={`mailto:${site.email}`}>{site.email}</a></p>
-        <p>Website: {site.domain}</p>
+        <p>Website: <a className="font-semibold text-cyan-800" href={site.url}>{site.domain}</a></p>
       </LegalSection>
       <LegalSection title="Umsatzsteuer">
         <p>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>
@@ -35,6 +35,9 @@ export default function ImpressumPage() {
       </LegalSection>
       <LegalSection title="Verbraucherstreitbeilegung">
         <p>Klickhafen ist nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      </LegalSection>
+      <LegalSection title="Stand">
+        <p>Stand: 11. Juni 2026</p>
       </LegalSection>
     </LegalPage>
   );

@@ -53,6 +53,7 @@ export function CookieConsent() {
     setAnalytics(next.analytics);
     setOpen(false);
     setSettings(false);
+    window.dispatchEvent(new Event("klickhafen:cookie-consent-changed"));
   }
 
   return (
@@ -83,9 +84,9 @@ export function CookieConsent() {
             </div>
 
             <p className="mt-5 text-base leading-7 text-slate-650">
-              Wir verwenden notwendige Technologien, damit diese Website funktioniert. Zusätzlich nutzen wir Vercel
-              Analytics und Vercel Speed Insights zur technischen Analyse und Performance-Messung. Sie können selbst
-              entscheiden, welche optionalen Dienste Sie zulassen möchten.
+              Wir verwenden notwendige Technologien, damit diese Website funktioniert. Zusätzlich können Vercel
+              Analytics und Vercel Speed Insights für anonymisierte Analyse- und Performance-Daten geladen werden.
+              Sie können selbst entscheiden, ob Sie diese optionalen Dienste zulassen möchten.
             </p>
 
             {settings ? (
@@ -106,8 +107,9 @@ export function CookieConsent() {
                   <span>
                     <span className="block font-semibold text-slate-950">Analyse & Performance</span>
                     <span className="mt-2 block text-sm leading-6 text-slate-650">
-                      Diese Kategorie umfasst Vercel Analytics und Vercel Speed Insights zur technischen Analyse,
-                      Seitenaufrufen, Performance-Messung und Ladegeschwindigkeit.
+                      Diese Kategorie umfasst Vercel Analytics und Vercel Speed Insights zur Auswertung von
+                      Seitenaufrufen, Performance-Messung und Ladegeschwindigkeit. Es werden keine eigenen
+                      Marketing-Cookies eingesetzt.
                     </span>
                   </span>
                   <input
