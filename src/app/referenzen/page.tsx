@@ -13,6 +13,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/referenzen",
 });
 
+export const dynamic = "force-dynamic";
+
 export default async function ReferencesPage() {
   const references = await getActiveReferences();
 
@@ -33,7 +35,7 @@ export default async function ReferencesPage() {
         </div>
       </section>
 
-      <Section title="Ausgewählte Referenzen" text="Es werden nur Referenzen angezeigt, die im Admin-Bereich freigegeben wurden.">
+      <Section title="Ausgewählte Referenzen" text="Ein Blick auf ausgewählte Websites und Projekte von Klickhafen.">
         {references.length ? (
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {references.map((reference) => (

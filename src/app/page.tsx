@@ -31,6 +31,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const references = await getActiveReferences(3);
   const jsonLd = {
