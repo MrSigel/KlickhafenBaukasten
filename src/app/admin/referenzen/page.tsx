@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ExternalLink, ImageIcon } from "lucide-react";
+import { ExternalLink, ImageIcon, PlayCircle } from "lucide-react";
 import { AdminHeader } from "@/components/admin/ui";
 import { SubmitButton } from "@/components/admin/submit-button";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
@@ -67,7 +67,11 @@ function ReferenceAdminCard({ reference }: { reference: ReferenceItem }) {
       <div className="grid gap-5 lg:grid-cols-[220px_1fr]">
         <div className="overflow-hidden rounded-md bg-slate-100">
           <div className="aspect-[3/2]">
-            {reference.screenshot_url ? (
+            {reference.media_url && reference.media_type === "video" ? (
+              <video src={reference.media_url} className="h-full w-full object-cover" controls preload="metadata" />
+            ) : reference.media_url ? (
+              <img src={reference.media_url} alt={`Projektbild ${reference.title}`} className="h-full w-full object-cover" />
+            ) : reference.screenshot_url ? (
               <img src={reference.screenshot_url} alt={`Vorschau ${reference.title}`} className="h-full w-full object-cover" />
             ) : (
               <div className="flex h-full items-center justify-center text-slate-400">
@@ -80,6 +84,7 @@ function ReferenceAdminCard({ reference }: { reference: ReferenceItem }) {
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-md bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-800">{referenceStatusLabel(reference.status)}</span>
             {reference.featured ? <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">Featured</span> : null}
+            {reference.media_url ? <span className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">{reference.media_type === "video" ? <PlayCircle className="size-3" /> : <ImageIcon className="size-3" />} Eigenes Medium</span> : null}
             <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">Sortierung {reference.sort_order}</span>
           </div>
           <h2 className="mt-3 text-xl font-semibold text-slate-950">{reference.title}</h2>
@@ -152,6 +157,11 @@ function ReferenceFields({ reference }: { reference?: ReferenceItem }) {
       <label className="text-sm font-semibold text-slate-800">
         Beschreibung
         <textarea name="description" defaultValue={reference?.description || ""} className="mt-2 min-h-24 w-full rounded-md border border-slate-300 px-3 py-2" />
+      </label>
+      <label className="text-sm font-semibold text-slate-800">
+        Eigenes Bild oder Video
+        <input name="media" type="file" accept="image/*,video/*" className="mt-2 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm" />
+        <span className="mt-1 block text-xs font-normal text-slate-500">Optional und unabhängig vom automatisch erzeugten Website-Vorschaubild.</span>
       </label>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-slate-800">

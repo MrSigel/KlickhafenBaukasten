@@ -40,6 +40,35 @@ function readReferenceForm(formData: FormData) {
   };
 }
 
+async function uploadReferenceMedia(referenceId: string, formData: FormData) {
+  const file = formData.get("media");
+  if (!(file instanceof File) || file.size === 0) return null;
+
+  const isImage = file.type.startsWith("image/");
+  const isVideo = file.type.startsWith("video/");
+  if (!isImage && !isVideo) {
+    throw new Error("Bitte laden Sie nur ein Bild oder Video hoch.");
+  }
+
+  const maxSize = isVideo ? 80 * 1024 * 1024 : 12 * 1024 * 1024;
+  if (file.size > maxSize) {
+    throw new Error(isVideo ? "Das Video ist zu groß. Maximal erlaubt sind 80 MB." : "Das Bild ist zu groß. Maximal erlaubt sind 12 MB.");
+  }
+
+  const extension = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || (isVideo ? "mp4" : "jpg");
+  const path = `reference-${referenceId}-${Date.now()}.${extension}`;
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.storage.from("reference-media").upload(path, file, {
+    contentType: file.type || (isVideo ? "video/mp4" : "image/jpeg"),
+    upsert: true,
+  });
+
+  if (error) throw new Error("Das Bild oder Video konnte nicht hochgeladen werden.");
+
+  const { data } = supabase.storage.from("reference-media").getPublicUrl(path);
+  return { media_url: data.publicUrl, media_type: isVideo ? "video" : "image" };
+}
+
 export async function createReferenceAction(formData: FormData) {
   await requireAdmin();
 
@@ -48,6 +77,11 @@ export async function createReferenceAction(formData: FormData) {
     const supabase = getSupabaseAdmin();
     const { data, error } = await supabase.from("references").insert(payload).select("id, title, url").single();
     if (error || !data) throw new Error("Die Referenz konnte nicht gespeichert werden.");
+
+    const media = await uploadReferenceMedia(data.id, formData);
+    if (media) {
+      await supabase.from("references").update(media).eq("id", data.id);
+    }
 
     await logActivity({
       action: "created",
@@ -82,6 +116,11 @@ export async function updateReferenceAction(formData: FormData) {
     const { data: current } = await supabase.from("references").select("url, screenshot_url").eq("id", id).single();
     const { error } = await supabase.from("references").update(payload).eq("id", id);
     if (error) throw new Error("Die Referenz konnte nicht aktualisiert werden.");
+
+    const media = await uploadReferenceMedia(id, formData);
+    if (media) {
+      await supabase.from("references").update(media).eq("id", id);
+    }
 
     if (!current?.screenshot_url || current.url !== payload.url) {
       await createScreenshot(id, payload.url);

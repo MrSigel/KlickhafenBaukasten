@@ -6,6 +6,8 @@ export type ReferenceItem = {
   url: string;
   description: string | null;
   screenshot_url: string | null;
+  media_url: string | null;
+  media_type: "image" | "video" | null;
   status: "draft" | "active" | "inactive" | "archived";
   sort_order: number;
   featured: boolean;
