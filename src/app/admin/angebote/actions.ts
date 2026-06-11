@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { calculateTotals, euroToCents } from "@/lib/server/money";
 import { nextNumber } from "@/lib/server/numbering";
 import { logActivity } from "@/lib/server/activity";
@@ -53,4 +54,25 @@ export async function createOfferAction(formData: FormData) {
     });
     redirect(`/admin/angebote/${data.id}`);
   }
+}
+
+export async function deleteOfferAction(formData: FormData) {
+  const id = String(formData.get("id") || "");
+  if (!id) redirect("/admin/angebote");
+
+  const supabase = getSupabaseAdmin();
+  const { data: offer } = await supabase.from("offers").select("id, offer_number, title").eq("id", id).single();
+  await supabase.from("offer_items").delete().eq("offer_id", id);
+  await supabase.from("offers").delete().eq("id", id);
+  await logActivity({
+    action: "deleted",
+    entityType: "offer",
+    entityId: id,
+    title: "Angebot gelöscht",
+    description: offer?.offer_number || offer?.title || "Angebot wurde gelöscht.",
+    metadata: offer || {},
+  });
+  revalidatePath("/admin/angebote");
+  revalidatePath("/admin/archiv");
+  redirect("/admin/angebote?success=Angebot wurde gelöscht.");
 }

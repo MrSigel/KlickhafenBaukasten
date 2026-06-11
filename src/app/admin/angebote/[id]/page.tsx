@@ -3,6 +3,8 @@ import { Download, FileDown } from "lucide-react";
 import { AdminHeader, Money, StatusBadge } from "@/components/admin/ui";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { AdminGuard } from "../../guard";
+import { ConfirmActionButton } from "../../beitraege/confirm-action-button";
+import { deleteOfferAction } from "../actions";
 
 export default async function OfferDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,14 +18,14 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
       <AdminHeader
         title={offer?.offer_number || "Angebot"}
         text={offer?.title}
-        action={<DocumentActions href={`/api/admin/offers/${id}/pdf`} backHref="/admin/angebote" />}
+        action={<DocumentActions id={id} href={`/api/admin/offers/${id}/pdf`} backHref="/admin/angebote" />}
       />
       <Detail doc={offer} items={items || []} />
     </AdminGuard>
   );
 }
 
-function DocumentActions({ href, backHref }: { href: string; backHref: string }) {
+function DocumentActions({ id, href, backHref }: { id: string; href: string; backHref: string }) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
       <a href={href} className="inline-flex min-h-10 items-center justify-center rounded-md bg-cyan-700 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-800">
@@ -35,6 +37,12 @@ function DocumentActions({ href, backHref }: { href: string; backHref: string })
       <Link href={backHref} className="inline-flex min-h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-950 hover:border-cyan-700 hover:text-cyan-800">
         Zurück zur Übersicht
       </Link>
+      <form action={deleteOfferAction}>
+        <input type="hidden" name="id" value={id} />
+        <ConfirmActionButton className="w-full rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:opacity-60" pendingText="Löschen ..." message="Dieses Angebot wirklich endgültig löschen?">
+          Angebot löschen
+        </ConfirmActionButton>
+      </form>
     </div>
   );
 }

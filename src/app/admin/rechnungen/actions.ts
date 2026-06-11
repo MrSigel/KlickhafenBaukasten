@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { calculateTotals, euroToCents } from "@/lib/server/money";
 import { nextNumber } from "@/lib/server/numbering";
 import { logActivity } from "@/lib/server/activity";
@@ -50,4 +51,25 @@ export async function createInvoiceAction(formData: FormData) {
     });
     redirect(`/admin/rechnungen/${data.id}`);
   }
+}
+
+export async function deleteInvoiceAction(formData: FormData) {
+  const id = String(formData.get("id") || "");
+  if (!id) redirect("/admin/rechnungen");
+
+  const supabase = getSupabaseAdmin();
+  const { data: invoice } = await supabase.from("invoices").select("id, invoice_number, title").eq("id", id).single();
+  await supabase.from("invoice_items").delete().eq("invoice_id", id);
+  await supabase.from("invoices").delete().eq("id", id);
+  await logActivity({
+    action: "deleted",
+    entityType: "invoice",
+    entityId: id,
+    title: "Rechnung gelöscht",
+    description: invoice?.invoice_number || invoice?.title || "Rechnung wurde gelöscht.",
+    metadata: invoice || {},
+  });
+  revalidatePath("/admin/rechnungen");
+  revalidatePath("/admin/archiv");
+  redirect("/admin/rechnungen?success=Rechnung wurde gelöscht.");
 }
