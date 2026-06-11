@@ -7,40 +7,52 @@ import { systemHelpLinks } from "@/lib/service-pages";
 import { services } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Leistungen | Webdesign, Website-Hilfe & SEO | Klickhafen",
+  title: "Leistungen | Websites, Shops, Relaunch & Hilfe | Klickhafen",
   description:
-    "Webdesign, Landingpages, WordPress-Websites, Website- & Shop-Hilfe, Pflegepakete und SEO-Grundlagen für bestehende und neue Websites.",
+    "Klickhafen erstellt Websites, Landingpages und Online-Shops von Grund auf und hilft bei Relaunch, Redesign, WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
   path: "/leistungen",
 });
 
 export default function LeistungenPage() {
   return (
     <>
-      <Section eyebrow="Leistungen" title="Webdesign, Website-Hilfe, Pflege und SEO" text="Klickhafen unterstützt neue Websites, Landingpages und bestehende Websites schnell, verständlich und sauber strukturiert.">
+      <Section eyebrow="Leistungen" title="Websites, Shops, Relaunch und Website-Hilfe" text="Klickhafen erstellt neue Websites, Landingpages und Online-Shops und unterstützt zusätzlich bei bestehenden Systemen, Relaunch, neuem Design, Pflege und technischer Weiterentwicklung.">
         <div className="grid gap-5 lg:grid-cols-3">
           {services.map((service) => <ServiceCard key={service.title} {...service} />)}
         </div>
       </Section>
-      <Section className="bg-slate-50" title="Gezielte Hilfe nach System" text="Für WordPress, Shopify, Wix, WooCommerce, Baukasten-Websites und regelmäßige Website-Pflege gibt es eigene Leistungsseiten mit klaren Beispielen und häufigen Fragen.">
+      <Section className="bg-slate-50" title="Gezielte Umsetzung nach System" text="Für neue Projekte, Relaunches und bestehende Systeme wie WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites gibt es eigene Leistungsseiten mit klaren Beispielen.">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {[
             {
               title: "Webdesign & Webentwicklung",
               href: "/leistungen/webdesign-webentwicklung",
-              text: "Komplette Websites, Landingpages, Onepager und WordPress- oder Baukasten-Websites.",
+              text: "Komplette Websites, Landingpages, Onepager, Relaunches und individuelle Lösungen mit oder ohne Baukasten.",
+              icon: services[0].icon,
+            },
+            {
+              title: "Website erstellen lassen",
+              href: "/leistungen/webdesign-webentwicklung",
+              text: "Neue Websites von 0 auf, passende Seitenstruktur, responsives Design und klare Anfragewege.",
+              icon: services[0].icon,
+            },
+            {
+              title: "Landingpage erstellen lassen",
+              href: "/leistungen/webdesign-webentwicklung",
+              text: "Landingpages und Onepager für Angebote, Dienstleistungen, lokale Kampagnen und konkrete Kontaktanfragen.",
               icon: services[0].icon,
             },
             ...systemHelpLinks,
             {
               title: "SEO & Sichtbarkeit",
               href: "/leistungen/seo-sichtbarkeit",
-              text: "SEO-Grundcheck, lokale Sichtbarkeit und technische Grundlagen für bestehende Websites.",
+              text: "SEO-Grundcheck, lokale Sichtbarkeit und technische Grundlagen für neue und bestehende Websites.",
               icon: services[1].icon,
             },
             {
               title: "Website- & Shop-Hilfe",
               href: "/leistungen/website-shop-hilfe",
-              text: "Direkte Hilfe für bestehende Websites und Shops, wenn etwas nicht funktioniert oder angepasst werden soll.",
+              text: "Direkte Hilfe und Weiterentwicklung für bestehende Websites und Shops, wenn etwas angepasst oder verbessert werden soll.",
               icon: services[0].icon,
             },
           ].map((service) => (
@@ -51,8 +63,8 @@ export default function LeistungenPage() {
       <section className="bg-slate-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="rounded-lg bg-white p-8 shadow-sm ring-1 ring-slate-200">
-            <h2 className="text-2xl font-semibold text-slate-950">Neue Website oder bestehende Website verbessern</h2>
-            <p className="mt-4 max-w-3xl leading-7 text-slate-650">Wenn eine neue Website, Landingpage oder WordPress-Website entstehen soll, führt die Webdesign-Seite durch Umfang, Ablauf und typische Projekte. Wenn ein vorhandenes System nicht macht, was es soll, passt die Website- & Shop-Hilfe.</p>
+            <h2 className="text-2xl font-semibold text-slate-950">Neue Website erstellen oder bestehende Website verbessern</h2>
+            <p className="mt-4 max-w-3xl leading-7 text-slate-650">Ob Website von 0, Landingpage, Online-Shop, Relaunch, neues Design oder technische Weiterentwicklung: Klickhafen hilft bei der passenden Umsetzung und bei bestehenden Systemen, die verbessert werden sollen.</p>
             <div className="mt-6">
               <ButtonLink href="/leistungen/webdesign-webentwicklung">Webdesign & Webentwicklung ansehen</ButtonLink>
               <ButtonLink href="/referenzen" variant="secondary" className="ml-0 mt-3 w-full sm:ml-3 sm:mt-0 sm:w-auto">Referenzen ansehen</ButtonLink>

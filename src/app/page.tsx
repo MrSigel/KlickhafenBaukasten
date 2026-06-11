@@ -25,9 +25,9 @@ import { systemHelpLinks } from "@/lib/service-pages";
 import { carePlans, services, site, systems, trustPoints } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Klickhafen | Webdesign, Landingpages & Website-Hilfe",
+  title: "Websites, Landingpages & Shop-Lösungen | Klickhafen",
   description:
-    "Klickhafen erstellt moderne Websites und Landingpages mit WordPress oder Baukasten-Systemen und hilft bei bestehenden Websites, Shops und SEO-Grundlagen.",
+    "Klickhafen erstellt Websites, Landingpages und Online-Shops von Grund auf und unterstützt bei WordPress, Shopify, Wix, WooCommerce, Baukasten-Websites, Relaunch und Website-Pflege.",
   path: "/",
 });
 
@@ -58,7 +58,7 @@ export default async function Home() {
       "WordPress Wartung Dortmund",
       "Responsives Webdesign Dortmund",
     ],
-    description: "Webdesign, Landingpages und Website-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
+    description: "Websites, Landingpages, Shop-Lösungen und Website-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.",
   };
 
   // Source: Unsplash, Christopher Gower - https://unsplash.com/photos/m_HRfLhgABo
@@ -73,21 +73,21 @@ export default async function Home() {
   const entryCards = [
     {
       title: "Neue Website erstellen lassen",
-      text: "Für Landingpages, Onepager und moderne Unternehmenswebsites mit WordPress oder passenden Baukasten-Systemen.",
+      text: "Komplette Websites, Landingpages und Onepager von 0 auf - mit WordPress, Baukasten-Systemen oder individueller Umsetzung ohne Baukasten.",
       cta: "Website erstellen lassen",
       href: "/leistungen/webdesign-webentwicklung",
       icon: LayoutTemplate,
     },
     {
-      title: "Bestehende Website verbessern",
-      text: "Für neue Inhalte, bessere Struktur, mobile Optimierung, Formulare, Design-Anpassungen und technische Verbesserungen.",
-      cta: "Website verbessern",
+      title: "Bestehende Website weiterentwickeln",
+      text: "Relaunch, neues Design, bessere Struktur, mobile Optimierung, neue Seitenbereiche und technische Verbesserungen für bestehende Websites.",
+      cta: "Website verbessern lassen",
       href: "/kontakt",
       icon: Wrench,
     },
     {
       title: "Website- & Shop-Hilfe",
-      text: "Für WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites, wenn etwas nicht funktioniert oder angepasst werden soll.",
+      text: "Unterstützung für WordPress, Shopify, Wix, WooCommerce, Strato, IONOS, Jimdo, Squarespace, Webflow und weitere Baukasten- oder Shop-Systeme.",
       cta: "Website-Hilfe ansehen",
       href: "/leistungen/website-shop-hilfe",
       icon: MessageCircle,
@@ -113,7 +113,7 @@ export default async function Home() {
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.08 }}
             >
               <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Websites, Landingpages & Website-Hilfe für Selbstständige und kleine Unternehmen
+                Websites, Landingpages & Shop-Lösungen für Selbstständige und kleine Unternehmen
               </h1>
             </MotionDiv>
             <MotionDiv
@@ -122,8 +122,9 @@ export default async function Home() {
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.16 }}
             >
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-100">
-                Klickhafen erstellt moderne Websites und Landingpages mit WordPress oder passenden Baukasten-Systemen
-                und hilft zusätzlich bei bestehenden Websites, Shops, technischen Problemen und SEO-Grundlagen.
+                Klickhafen erstellt komplette Websites, Landingpages und Online-Shops von Grund auf - mit WordPress,
+                Shopify, Wix, Strato, IONOS oder passenden Baukasten-Systemen. Zusätzlich unterstütze ich bei bestehenden
+                Websites, Relaunch, neuem Design, technischer Weiterentwicklung und individuellen Lösungen ohne Baukasten.
               </p>
             </MotionDiv>
             <MotionDiv
@@ -140,7 +141,7 @@ export default async function Home() {
                 variant="secondary"
                 className="w-full border-white/35 bg-white/10 text-white backdrop-blur hover:border-cyan-200 hover:bg-white/15 hover:text-white sm:w-auto"
               >
-                Website-Problem schildern
+                Bestehende Website verbessern
               </ButtonLink>
             </MotionDiv>
             <MotionDiv
@@ -193,7 +194,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <Section title="Der passende Einstieg für Ihr Website-Projekt" text="Ob neue Website, bessere Struktur oder konkrete Hilfe bei einem bestehenden System: Klickhafen unterstützt verständlich, sauber und online.">
+      <Section title="Der passende Einstieg für Ihr Website-Projekt" text="Ob neue Website von 0 auf, Relaunch, Redesign oder konkrete Hilfe bei einem bestehenden System: Klickhafen unterstützt verständlich, sauber und online.">
         <div className="grid gap-5 lg:grid-cols-3">
           {entryCards.map(({ title, text, cta, href, icon: Icon }) => (
             <FadeIn key={title} className="flex min-h-full flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
@@ -208,7 +209,7 @@ export default async function Home() {
         </div>
       </Section>
 
-      <Section className="bg-slate-50" title="Für neue und bestehende Websites, Shops und Baukasten-Systeme" text="Klickhafen hilft Selbstständigen, kleinen Unternehmen und lokalen Betrieben aus Castrop-Rauxel, dem Ruhrgebiet und deutschlandweit bei neuen Websites, Landingpages und bestehenden Website-Problemen.">
+      <Section className="bg-slate-50" title="Für neue und bestehende Websites, Shops und Baukasten-Systeme" text="Klickhafen hilft Selbstständigen, kleinen Unternehmen und lokalen Betrieben aus Castrop-Rauxel, dem Ruhrgebiet und deutschlandweit bei neuen Websites, Landingpages, Shop-Lösungen, Relaunches und bestehenden Systemen.">
         <div className="flex flex-wrap gap-3">
           {systems.slice(0, 13).map((system) => (
             <span key={system} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">{system}</span>
@@ -236,7 +237,7 @@ export default async function Home() {
           {systemHelpLinks.concat({
             title: "SEO & Sichtbarkeit",
             href: "/leistungen/seo-sichtbarkeit",
-            text: "SEO-Grundcheck, lokale Sichtbarkeit und technische Grundlagen für bestehende Websites.",
+            text: "SEO-Grundcheck, lokale Sichtbarkeit und technische Grundlagen für neue und bestehende Websites.",
             icon: Search,
           }).map((service) => (
             <ServiceCard key={service.href} title={service.title} text={service.text} price="Mehr erfahren" href={service.href} icon={service.icon} />

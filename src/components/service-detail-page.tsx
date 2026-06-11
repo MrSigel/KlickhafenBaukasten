@@ -75,7 +75,7 @@ export function ServiceDetailPage({ page }: { page: ServicePage }) {
         </Section>
       ) : null}
 
-      <Section className={page.systems ? "bg-slate-50" : ""} title="Typische Leistungen" text="Die Unterstützung richtet sich an bestehende Websites und Shops, bei denen konkrete Anpassungen oder Prüfungen notwendig sind.">
+      <Section className={page.systems ? "bg-slate-50" : ""} title="Typische Leistungen" text="Die Unterstützung reicht von neuen Websites, Shops und Relaunches bis zu konkreten Anpassungen, Prüfungen und Verbesserungen an bestehenden Systemen.">
         <CheckList columns items={page.tasks} />
       </Section>
 
@@ -108,8 +108,8 @@ export function ServiceDetailPage({ page }: { page: ServicePage }) {
       <section className="bg-cyan-950 py-16 text-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div className="max-w-3xl">
-            <h2 className="text-3xl font-semibold tracking-tight">Hilfe für Ihr System anfragen</h2>
-            <p className="mt-4 text-lg leading-8 text-cyan-50">Schildern Sie kurz, wobei Sie Unterstützung benötigen. Klickhafen hilft online in Castrop-Rauxel, im Ruhrgebiet und deutschlandweit.</p>
+            <h2 className="text-3xl font-semibold tracking-tight">Projekt oder Hilfe anfragen</h2>
+            <p className="mt-4 text-lg leading-8 text-cyan-50">Schildern Sie kurz, ob eine neue Website, ein Relaunch, ein Shop oder Unterstützung an einem bestehenden System geplant ist. Klickhafen hilft online in Castrop-Rauxel, im Ruhrgebiet und deutschlandweit.</p>
           </div>
           <ButtonLink href="/kontakt" variant="secondary" className="shrink-0">{page.cta}</ButtonLink>
         </div>

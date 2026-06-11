@@ -21,9 +21,9 @@ import { pageMetadata } from "@/lib/metadata";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Webdesign & Webentwicklung für Websites | Klickhafen",
+  title: "Website erstellen lassen, Landingpage & Relaunch | Klickhafen",
   description:
-    "Moderne Websites, Landingpages und WordPress- oder Baukasten-Websites für Selbstständige, kleine Unternehmen und lokale Betriebe.",
+    "Websites, Landingpages, Onepager und Online-Shops erstellen oder überarbeiten lassen: WordPress, Baukasten-Systeme, Relaunch, Redesign und individuelle Lösungen.",
   path: "/leistungen/webdesign-webentwicklung",
 });
 
@@ -33,7 +33,10 @@ const included = [
   "kleine Unternehmenswebsites",
   "WordPress-Websites",
   "Baukasten-Websites",
+  "individuelle Lösungen ohne Baukasten",
   "Relaunch bestehender Websites",
+  "neues Design für vorhandene Websites",
+  "technische Weiterentwicklung",
   "responsive Umsetzung",
   "Kontaktformular",
   "klare Seitenstruktur",
@@ -139,7 +142,7 @@ export default function WebdesignWebentwicklungPage() {
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Webdesign & Webentwicklung für Websites und Landingpages",
+    name: "Webdesign & Webentwicklung für Websites, Landingpages und Shops",
     provider: {
       "@type": "ProfessionalService",
       name: site.name,
@@ -147,9 +150,9 @@ export default function WebdesignWebentwicklungPage() {
       email: site.email,
     },
     areaServed: ["Castrop-Rauxel", "Dortmund", "Herne", "Bochum", "Ruhrgebiet", "Deutschland"],
-    serviceType: ["Webdesign", "Webentwicklung", "Landingpage erstellen lassen", "WordPress-Website erstellen", "Baukasten-Website erstellen"],
+    serviceType: ["Webdesign", "Webentwicklung", "Landingpage erstellen lassen", "WordPress-Website erstellen", "Baukasten-Website erstellen", "Website-Relaunch", "Shop erstellen"],
     description:
-      "Moderne Websites, Landingpages und kleine Unternehmenswebsites mit WordPress oder passenden Baukasten-Systemen.",
+      "Moderne Websites, Landingpages, kleine Unternehmenswebsites, Shops, Relaunches und individuelle Lösungen mit oder ohne Baukasten.",
   };
 
   return (
@@ -166,11 +169,12 @@ export default function WebdesignWebentwicklungPage() {
               <Code className="size-10 text-cyan-700" aria-hidden="true" />
               <p className="mt-5 text-sm font-semibold uppercase tracking-wide text-cyan-700">Webdesign & Webentwicklung</p>
               <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-                Webdesign & Webentwicklung für Websites und Landingpages
+                Websites, Landingpages und Shop-Lösungen erstellen lassen
               </h1>
               <p className="mt-6 text-lg leading-8 text-slate-650">
-                Klickhafen erstellt moderne Websites, Landingpages und kleine Unternehmenswebsites mit WordPress oder passenden
-                Baukasten-Systemen - verständlich, sauber strukturiert und auf Anfragewege ausgelegt.
+                Klickhafen erstellt moderne Websites, Landingpages, Onepager und Shop-Lösungen von Grund auf - mit WordPress,
+                Baukasten-Systemen oder individueller Umsetzung ohne Baukasten. Bestehende Websites können neu gestaltet,
+                technisch weiterentwickelt oder als Relaunch sauber neu aufgebaut werden.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <ButtonLink href="/kontakt">Website-Projekt anfragen</ButtonLink>
@@ -186,8 +190,8 @@ export default function WebdesignWebentwicklungPage() {
               <Globe className="size-8 text-cyan-700" aria-hidden="true" />
               <h2 className="mt-4 text-2xl font-semibold text-slate-950">Für Castrop-Rauxel, das Ruhrgebiet und deutschlandweit</h2>
               <p className="mt-4 leading-7 text-slate-650">
-                Sinnvoll für neue Websites, Website überarbeiten, Landingpage erstellen lassen, WordPress-Website erstellen
-                und Baukasten-Website erstellen - online abstimmbar und klar im Umfang.
+                Sinnvoll für neue Websites, Website überarbeiten, Landingpage erstellen lassen, WordPress-Website erstellen,
+                Baukasten-Website erstellen, Shop-Projekte und individuelle Lösungen - online abstimmbar und klar im Umfang.
               </p>
             </FadeIn>
           </div>

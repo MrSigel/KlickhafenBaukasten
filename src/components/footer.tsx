@@ -28,7 +28,7 @@ export function Footer() {
             />
           </Link>
           <p className="mt-4 text-sm leading-6 text-slate-300">
-            Webdesign, Landingpages und verständliche Website-Hilfe für WordPress, Shopify, Wix, WooCommerce und Baukasten-Systeme.
+            Klickhafen erstellt Websites, Landingpages und Online-Shops von Grund auf und unterstützt bei Relaunch, Redesign, Website-Pflege und bestehenden Systemen wie WordPress, Shopify, Wix, WooCommerce und Baukasten-Websites.
           </p>
           <p className="mt-4 text-xs leading-5 text-slate-400">
             Optionale Analyse- und Performance-Dienste werden nur nach Zustimmung geladen. Weitere Informationen finden Sie in der Datenschutzerklärung.
@@ -48,17 +48,19 @@ export function Footer() {
           <p className="font-semibold">Leistungen</p>
           <div className="mt-4 flex flex-col gap-3">
             <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Webdesign & Webentwicklung</Link>
+            <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Website erstellen lassen</Link>
             <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">Landingpage erstellen lassen</Link>
-            <Link href="/leistungen/webdesign-webentwicklung" className="text-sm text-slate-300 transition hover:text-white">WordPress-Website erstellen</Link>
-            <Link href="/leistungen/wordpress-hilfe" className="text-sm text-slate-300 transition hover:text-white">WordPress-Hilfe</Link>
-            <Link href="/leistungen/shopify-hilfe" className="text-sm text-slate-300 transition hover:text-white">Shopify-Hilfe</Link>
-            <Link href="/leistungen/wix-hilfe" className="text-sm text-slate-300 transition hover:text-white">Wix-Hilfe</Link>
-            <Link href="/leistungen/woocommerce-hilfe" className="text-sm text-slate-300 transition hover:text-white">WooCommerce-Hilfe</Link>
+            <Link href="/leistungen/wordpress-hilfe" className="text-sm text-slate-300 transition hover:text-white">WordPress</Link>
+            <Link href="/leistungen/shopify-hilfe" className="text-sm text-slate-300 transition hover:text-white">Shopify</Link>
+            <Link href="/leistungen/wix-hilfe" className="text-sm text-slate-300 transition hover:text-white">Wix</Link>
+            <Link href="/leistungen/woocommerce-hilfe" className="text-sm text-slate-300 transition hover:text-white">WooCommerce</Link>
+            <Link href="/leistungen/baukasten-hilfe" className="text-sm text-slate-300 transition hover:text-white">Baukasten-Websites</Link>
             <Link href="/leistungen/website-shop-hilfe" className="text-sm text-slate-300 transition hover:text-white">Website- & Shop-Hilfe</Link>
             <Link href="/leistungen/seo-sichtbarkeit" className="text-sm text-slate-300 transition hover:text-white">SEO & Sichtbarkeit</Link>
             <Link href="/leistungen/website-pflege" className="text-sm text-slate-300 transition hover:text-white">Website-Pflege</Link>
             <Link href="/ratgeber" className="text-sm text-slate-300 transition hover:text-white">Ratgeber</Link>
             <Link href="/referenzen" className="text-sm text-slate-300 transition hover:text-white">Referenzen</Link>
+            <Link href="/kontakt" className="text-sm text-slate-300 transition hover:text-white">Kontakt</Link>
           </div>
         </div>
         <div>

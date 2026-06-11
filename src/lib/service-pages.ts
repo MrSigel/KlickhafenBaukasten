@@ -32,7 +32,7 @@ const standardFaq = [
   {
     question: "Was kostet die Hilfe?",
     answer:
-      "Einzelne Website- und Shop-Hilfe wird transparent mit 29 Euro pro Stunde abgerechnet, sofern nichts anderes vereinbart wurde.",
+      "Der Preis richtet sich nach Umfang, System und gewünschter Umsetzung. Nach einer kurzen Einschätzung kann ein individuelles Angebot oder eine transparente Abrechnung vereinbart werden.",
   },
   {
     question: "Brauche ich technische Kenntnisse?",
@@ -49,16 +49,19 @@ const standardFaq = [
 export const servicePages: ServicePage[] = [
   {
     slug: "wordpress-hilfe",
-    title: "WordPress-Hilfe für bestehende Websites",
-    metaTitle: "WordPress-Hilfe & WordPress-Websites | Klickhafen",
+    title: "WordPress-Website erstellen, überarbeiten oder weiterentwickeln lassen",
+    metaTitle: "WordPress-Website erstellen & überarbeiten | Klickhafen",
     metaDescription:
-      "Hilfe bei bestehenden WordPress-Websites und Unterstützung bei neuen WordPress-Websites, Anpassungen, Formularen, mobiler Ansicht und SEO-Grundlagen.",
-    eyebrow: "WordPress Support",
+      "WordPress-Websites erstellen, überarbeiten und weiterentwickeln lassen: Relaunch, Elementor, mobile Ansicht, Formulare, Struktur und SEO-Grundlagen.",
+    eyebrow: "WordPress Websites",
     intro:
-      "Klickhafen hilft bei bestehenden WordPress-Websites, wenn Anpassungen, Fehlerbehebungen, neue Inhalte, Formularprobleme, mobile Darstellung oder kleine technische Änderungen notwendig sind. Die Unterstützung erfolgt online für Castrop-Rauxel, das Ruhrgebiet und deutschlandweit.",
-    cta: "WordPress-Hilfe anfragen",
+      "Klickhafen erstellt neue WordPress-Websites, überarbeitet bestehende Seiten und unterstützt bei Relaunch, Redesign, Elementor, Formularen, mobiler Darstellung, Seitenstruktur und technischer Weiterentwicklung. Die Unterstützung erfolgt online für Castrop-Rauxel, das Ruhrgebiet und deutschlandweit.",
+    cta: "WordPress-Projekt anfragen",
     icon: Wrench,
     tasks: [
+      "neue WordPress-Website erstellen",
+      "bestehende WordPress-Website überarbeiten",
+      "Relaunch oder neues Design umsetzen",
       "Texte und Bilder ändern",
       "neue Unterseiten anlegen",
       "Elementor-Anpassungen",
@@ -90,19 +93,23 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "shopify-hilfe",
-    title: "Shopify-Hilfe für bestehende Online-Shops",
-    metaTitle: "Shopify-Hilfe für Online-Shops | Klickhafen",
+    title: "Shopify-Shop erstellen, überarbeiten oder weiterentwickeln lassen",
+    metaTitle: "Shopify-Shop erstellen & überarbeiten | Klickhafen",
     metaDescription:
-      "Hilfe bei Shopify-Shops: Produkte, Texte, Bilder, Zahlungsarten, Versand, Theme-Anpassungen und SEO-Grundlagen für bestehende Shops.",
-    eyebrow: "Shopify Support",
+      "Shopify-Shop erstellen, überarbeiten und weiterentwickeln lassen: Produkte, Theme, Zahlungsarten, Versand, mobile Ansicht und SEO-Grundlagen.",
+    eyebrow: "Shopify Shops",
     intro:
-      "Klickhafen unterstützt bei Shopify-Shops, wenn Produkte, Texte, Bilder, Zahlungsarten, Versand, Seitenbereiche oder kleinere technische Einstellungen angepasst werden sollen.",
-    cta: "Shopify-Hilfe anfragen",
+      "Klickhafen erstellt neue Shopify-Shops und entwickelt bestehende Shops weiter. Dazu gehören Produktseiten, Startseite, Kollektionen, Theme-Anpassungen, Zahlungsarten, Versand, mobile Ansicht und eine klare Shop-Struktur.",
+    cta: "Shop-Projekt anfragen",
     icon: ShoppingBag,
     tasks: [
+      "neuen Shopify-Shop erstellen",
+      "bestehenden Shopify-Shop überarbeiten",
+      "Shop-Design und Theme-Bereiche anpassen",
       "Produkte einpflegen",
       "Produkttexte anpassen",
       "Bilder austauschen",
+      "Varianten pflegen",
       "Kategorien / Kollektionen prüfen",
       "Zahlungsarten prüfen",
       "Versandoptionen prüfen",
@@ -124,16 +131,19 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "wix-hilfe",
-    title: "Wix-Hilfe für bestehende Websites",
-    metaTitle: "Wix-Hilfe für bestehende Websites | Klickhafen",
+    title: "Wix-Website erstellen, neu gestalten oder überarbeiten lassen",
+    metaTitle: "Wix-Website erstellen & überarbeiten | Klickhafen",
     metaDescription:
-      "Schnelle Wix-Hilfe für bestehende Websites: Texte, Bilder, mobile Ansicht, Formulare, Seitenstruktur und SEO-Grundlagen.",
-    eyebrow: "Wix Website-Hilfe",
+      "Wix-Website erstellen, neu gestalten oder überarbeiten lassen: Struktur, Texte, Bilder, Formulare, mobile Ansicht, Domain und SEO-Grundlagen.",
+    eyebrow: "Wix Websites",
     intro:
-      "Klickhafen hilft bei bestehenden Wix-Websites, wenn Inhalte geändert, neue Bereiche ergänzt, mobile Ansichten verbessert oder Einstellungen geprüft werden sollen.",
-    cta: "Wix-Hilfe anfragen",
+      "Klickhafen erstellt neue Wix-Websites, gestaltet bestehende Wix-Seiten neu und hilft bei Struktur, Texten, Bildern, Formularen, mobiler Ansicht, Domain-Verknüpfung und SEO-Grundlagen.",
+    cta: "Wix-Projekt anfragen",
     icon: Blocks,
     tasks: [
+      "neue Wix-Website erstellen",
+      "bestehende Wix-Website neu gestalten",
+      "Relaunch oder bessere Seitenstruktur umsetzen",
       "Texte ändern",
       "Bilder austauschen",
       "neue Abschnitte ergänzen",
@@ -141,6 +151,7 @@ export const servicePages: ServicePage[] = [
       "Buttons und Links prüfen",
       "Kontaktformulare prüfen",
       "Seitenstruktur verbessern",
+      "Domain-Anbindung prüfen",
       "SEO-Grundlagen bei Wix prüfen",
       "Impressum, Datenschutz oder rechtliche Seiten nach Kundenvorgabe einfügen",
       "kleine Darstellungsprobleme beheben",
@@ -156,16 +167,19 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "woocommerce-hilfe",
-    title: "WooCommerce-Hilfe für WordPress-Shops",
-    metaTitle: "WooCommerce-Hilfe für WordPress-Shops | Klickhafen",
+    title: "WooCommerce-Shop erstellen, überarbeiten oder verbessern lassen",
+    metaTitle: "WooCommerce-Shop erstellen & überarbeiten | Klickhafen",
     metaDescription:
-      "Hilfe bei WooCommerce-Shops: Produkte, Versand, Zahlungsarten, Checkout, mobile Ansicht und SEO-Grundlagen für WordPress-Shops.",
-    eyebrow: "WooCommerce Support",
+      "WooCommerce-Shop erstellen, überarbeiten und verbessern lassen: Produkte, Versand, Zahlungsarten, Checkout, mobile Ansicht und SEO-Grundlagen.",
+    eyebrow: "WooCommerce Shops",
     intro:
-      "Klickhafen unterstützt bei WooCommerce-Shops, wenn Produkte, Versand, Zahlungsarten, Shopseiten, Produktseiten oder kleinere technische Probleme angepasst werden sollen.",
-    cta: "WooCommerce-Hilfe anfragen",
+      "Klickhafen erstellt WooCommerce-Shops auf WordPress-Basis und überarbeitet bestehende Shops. Dazu gehören Produktseiten, Shop-Struktur, Checkout, Zahlungsarten, Versand, mobile Ansicht und technische Verbesserungen.",
+    cta: "Shop-Projekt anfragen",
     icon: ShoppingCart,
     tasks: [
+      "neuen WooCommerce-Shop erstellen",
+      "bestehenden WooCommerce-Shop überarbeiten",
+      "Shop-Struktur und Produktseiten verbessern",
       "Produkte einpflegen",
       "Produkttexte ändern",
       "Produktbilder austauschen",
@@ -189,17 +203,20 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "baukasten-hilfe",
-    title: "Baukasten-Hilfe für Websites von Strato, IONOS, Jimdo & Co.",
-    metaTitle: "Baukasten-Hilfe für Strato, IONOS, Jimdo & Wix | Klickhafen",
+    title: "Baukasten-Website erstellen, redesignen oder überarbeiten lassen",
+    metaTitle: "Baukasten-Website erstellen & überarbeiten | Klickhafen",
     metaDescription:
-      "Hilfe für Baukasten-Websites von Strato, IONOS, Jimdo, Wix, Squarespace & Co.: Inhalte, Formulare, mobile Ansicht und SEO-Grundlagen.",
-    eyebrow: "Website-Baukasten Hilfe",
+      "Baukasten-Website erstellen, redesignen oder überarbeiten lassen: Strato, IONOS, Jimdo, Wix, Squarespace, Webflow und weitere Systeme.",
+    eyebrow: "Baukasten Websites",
     intro:
-      "Klickhafen hilft bei bestehenden Baukasten-Websites, wenn Inhalte, Seiten, Bilder, Buttons, Formulare, mobile Darstellung oder Grundeinstellungen angepasst werden sollen.",
-    cta: "Baukasten-Hilfe anfragen",
+      "Klickhafen erstellt neue Baukasten-Websites, redesignet bestehende Seiten und hilft bei Inhalten, Seitenstruktur, Bildern, Buttons, Formularen, mobiler Darstellung, Domain-Verknüpfung und SEO-Grundlagen.",
+    cta: "Baukasten-Projekt anfragen",
     icon: HelpCircle,
-    systems: ["Strato", "IONOS", "Jimdo", "Squarespace", "Webflow", "GoDaddy", "One.com", "Weebly", "Wix"],
+    systems: ["Strato", "IONOS", "Jimdo", "Squarespace", "Webflow", "GoDaddy", "One.com", "Weebly", "Wix", "weitere Baukasten-Systeme"],
     tasks: [
+      "neue Baukasten-Website erstellen",
+      "bestehende Baukasten-Website redesignen",
+      "Relaunch und bessere Seitenstruktur umsetzen",
       "Texte ändern",
       "Bilder austauschen",
       "neue Abschnitte erstellen",
