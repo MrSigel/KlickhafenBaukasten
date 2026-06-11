@@ -26,6 +26,7 @@ export const metadata: Metadata = {
 
 type Search = {
   tab?: string;
+  page?: string;
   q?: string;
   category?: string;
   platform?: string;
@@ -35,22 +36,28 @@ type Search = {
   error?: string;
 };
 
+const pageSize = 5;
+
 export default async function AdminPostsPage({ searchParams }: { searchParams: Promise<Search> }) {
   const params = await searchParams;
   const activeTab = params.tab === "gruppen" ? "gruppen" : "beitraege";
+  const currentPage = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
+  const from = (currentPage - 1) * pageSize;
+  const to = from + pageSize - 1;
   const supabase = getSupabaseAdmin();
 
-  let postsQuery = supabase.from("posts").select("*").order("created_at", { ascending: false });
+  let postsQuery = supabase.from("posts").select("*", { count: "exact" }).order("created_at", { ascending: false });
   if (activeTab === "beitraege") {
     if (params.q) postsQuery = postsQuery.or(`title.ilike.%${params.q}%,description.ilike.%${params.q}%`);
     if (params.category) postsQuery = postsQuery.eq("category", params.category);
     if (params.platform) postsQuery = postsQuery.eq("platform", params.platform);
     if (params.status) postsQuery = postsQuery.eq("status", params.status);
   }
+  postsQuery = postsQuery.range(activeTab === "beitraege" ? from : 0, activeTab === "beitraege" ? to : pageSize - 1);
 
   let groupsQuery = supabase
     .from("facebook_groups")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("status", { ascending: true })
     .order("category", { ascending: true })
     .order("last_opened_at", { ascending: false, nullsFirst: false })
@@ -61,10 +68,13 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: P
     if (params.owner) groupsQuery = groupsQuery.eq("account_owner", params.owner);
     if (params.status) groupsQuery = groupsQuery.eq("status", params.status);
   }
+  groupsQuery = groupsQuery.range(activeTab === "gruppen" ? from : 0, activeTab === "gruppen" ? to : pageSize - 1);
 
-  const [{ data: postsData, error: postsError }, { data: groupsData, error: groupsError }] = await Promise.all([postsQuery, groupsQuery]);
+  const [{ data: postsData, error: postsError, count: postsCount }, { data: groupsData, error: groupsError, count: groupsCount }] = await Promise.all([postsQuery, groupsQuery]);
   const posts = (postsData || []) as AdminPost[];
   const groups = (groupsData || []) as FacebookGroup[];
+  const totalItems = activeTab === "gruppen" ? groupsCount || 0 : postsCount || 0;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
   return (
     <AdminGuard>
@@ -82,7 +92,7 @@ export default async function AdminPostsPage({ searchParams }: { searchParams: P
         <TabLink href="/admin/beitraege?tab=gruppen" active={activeTab === "gruppen"}>Facebook-Gruppen</TabLink>
       </div>
 
-      {activeTab === "gruppen" ? <GroupsTab params={params} groups={groups} /> : <PostsTab params={params} posts={posts} />}
+      {activeTab === "gruppen" ? <GroupsTab params={params} groups={groups} page={currentPage} totalPages={totalPages} totalItems={totalItems} /> : <PostsTab params={params} posts={posts} page={currentPage} totalPages={totalPages} totalItems={totalItems} />}
     </AdminGuard>
   );
 }
@@ -95,7 +105,7 @@ function TabLink({ href, active, children }: { href: string; active: boolean; ch
   );
 }
 
-function PostsTab({ params, posts }: { params: Search; posts: AdminPost[] }) {
+function PostsTab({ params, posts, page, totalPages, totalItems }: { params: Search; posts: AdminPost[]; page: number; totalPages: number; totalItems: number }) {
   return (
     <>
       <form className="grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm lg:grid-cols-[1fr_180px_180px_160px_auto]">
@@ -118,11 +128,12 @@ function PostsTab({ params, posts }: { params: Search; posts: AdminPost[] }) {
         {posts.map((post) => <PostCard key={post.id} post={post} />)}
         {!posts.length ? <EmptyPosts /> : null}
       </div>
+      <Pagination params={params} page={page} totalPages={totalPages} totalItems={totalItems} />
     </>
   );
 }
 
-function GroupsTab({ params, groups }: { params: Search; groups: FacebookGroup[] }) {
+function GroupsTab({ params, groups, page, totalPages, totalItems }: { params: Search; groups: FacebookGroup[]; page: number; totalPages: number; totalItems: number }) {
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_420px]">
       <div>
@@ -151,6 +162,7 @@ function GroupsTab({ params, groups }: { params: Search; groups: FacebookGroup[]
           {groups.map((group) => <GroupCard key={group.id} group={group} />)}
           {!groups.length ? <EmptyGroups /> : null}
         </div>
+        <Pagination params={params} page={page} totalPages={totalPages} totalItems={totalItems} />
       </div>
       <form action={createFacebookGroupAction} className="h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-950">+ Neu</h2>
@@ -159,6 +171,41 @@ function GroupsTab({ params, groups }: { params: Search; groups: FacebookGroup[]
       </form>
     </div>
   );
+}
+
+function Pagination({ params, page, totalPages, totalItems }: { params: Search; page: number; totalPages: number; totalItems: number }) {
+  if (totalPages <= 1) return null;
+  return (
+    <nav className="mt-6 flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm sm:flex-row sm:items-center sm:justify-between" aria-label="Seitennavigation">
+      <p className="text-slate-600">{totalItems} Einträge · Seite {page} von {totalPages}</p>
+      <div className="grid grid-cols-2 gap-2 sm:flex">
+        <PageLink params={params} page={page - 1} disabled={page <= 1}>Zurück</PageLink>
+        <PageLink params={params} page={page + 1} disabled={page >= totalPages}>Weiter</PageLink>
+      </div>
+    </nav>
+  );
+}
+
+function PageLink({ params, page, disabled, children }: { params: Search; page: number; disabled: boolean; children: React.ReactNode }) {
+  if (disabled) {
+    return <span className="inline-flex min-h-10 min-w-28 items-center justify-center rounded-md border border-slate-200 bg-slate-50 px-4 py-2 font-semibold text-slate-400">{children}</span>;
+  }
+  return (
+    <Link href={pageHref(params, page)} className="inline-flex min-h-10 min-w-28 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-950 hover:border-cyan-700 hover:text-cyan-800">
+      {children}
+    </Link>
+  );
+}
+
+function pageHref(params: Search, page: number) {
+  const search = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (!value || key === "success" || key === "error" || key === "page") continue;
+    search.set(key, value);
+  }
+  if (page > 1) search.set("page", String(page));
+  const query = search.toString();
+  return `/admin/beitraege${query ? `?${query}` : ""}`;
 }
 
 function PostCard({ post }: { post: AdminPost }) {
