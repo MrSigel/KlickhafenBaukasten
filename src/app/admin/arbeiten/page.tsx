@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { AdminHeader, AdminLink } from "@/components/admin/ui";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { AdminGuard } from "../guard";
-import { WorkCard } from "./work-card";
+import { WorkWizard } from "./work-wizard";
 import { type AdminPost } from "@/lib/posts";
 import {
   type FacebookGroup,
   facebookGroupCategories,
   facebookGroupOwners,
-  facebookGroupStatusLabel,
-  facebookGroupStatuses,
 } from "@/lib/facebook-groups";
 
 export const metadata: Metadata = {
@@ -22,8 +21,6 @@ type SearchParams = {
   q?: string;
   category?: string;
   owner?: string;
-  status?: string;
-  view?: string;
 };
 
 type WorkLog = {
@@ -55,7 +52,6 @@ const categoryFallbacks: Record<string, string[]> = {
 
 export default async function AdminWorkPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
-  const mode = params.view === "done" ? "done" : params.view === "all" ? "all" : "open";
   const cutoff = new Date(Date.now() - lockHours * 60 * 60 * 1000).toISOString();
   const supabase = getSupabaseAdmin();
 
@@ -70,24 +66,22 @@ export default async function AdminWorkPage({ searchParams }: { searchParams: Pr
   if (params.q) groupsQuery = groupsQuery.or(`name.ilike.%${params.q}%,url.ilike.%${params.q}%,notes.ilike.%${params.q}%`);
   if (params.category) groupsQuery = groupsQuery.eq("category", params.category);
   if (params.owner) groupsQuery = groupsQuery.eq("account_owner", params.owner);
-  if (params.status) groupsQuery = groupsQuery.eq("status", params.status);
-  else groupsQuery = groupsQuery.eq("status", "active");
+  groupsQuery = groupsQuery.eq("status", "active");
 
   const [{ data: groupsData, error: groupsError }, { data: postsData, error: postsError }, { data: logsData }] = await Promise.all([
     groupsQuery,
     supabase.from("posts").select("*").eq("status", "active").eq("platform", "facebook").order("created_at", { ascending: false }),
-    supabase.from("work_logs").select("group_id, post_id, action, worked_at, created_at").gte("worked_at", cutoff),
+    supabase.from("work_logs").select("group_id, post_id, action, worked_at, created_at").eq("action", "posted"),
   ]);
 
   const posts = (postsData || []) as AdminPost[];
   const logs = (logsData || []) as WorkLog[];
-  const lockByGroup = createLockMap((groupsData || []) as FacebookGroup[], logs);
-  const groups = ((groupsData || []) as FacebookGroup[]).filter((group) => {
-    const lock = lockByGroup.get(group.id) || createLockInfo(null);
-    if (mode === "open") return !lock.locked;
-    if (mode === "done") return lock.locked;
-    return true;
-  });
+  const latestPostedByGroup = createLatestPostedMap(logs);
+  const availableGroups = ((groupsData || []) as FacebookGroup[])
+    .filter((group) => !isLocked(latestPostedByGroup.get(group.id) || null, cutoff))
+    .sort((a, b) => groupSortValue(a, latestPostedByGroup) - groupSortValue(b, latestPostedByGroup) || new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+  const doneToday = logs.filter((log) => Boolean(log.group_id) && new Date(log.worked_at || log.created_at).getTime() >= new Date(cutoff).getTime()).length;
+  const wizardItems = availableGroups.map((group) => ({ group, post: findMatchingPost(group, posts) }));
 
   return (
     <AdminGuard>
@@ -96,21 +90,18 @@ export default async function AdminWorkPage({ searchParams }: { searchParams: Pr
         text="Hier findest du passende Facebook-Gruppen mit dem passenden Beitragstext zum schnellen Kopieren und Posten."
       />
       {groupsError || postsError ? <p className="mb-4 rounded-md bg-red-50 p-4 text-red-800">Daten konnten nicht geladen werden.</p> : null}
-      <Filters params={params} mode={mode} />
-      {!groups.length ? <EmptyGroups /> : null}
-      {groups.length && !posts.length ? <EmptyPosts /> : null}
-      <div className="mt-6 grid gap-4">
-        {groups.map((group) => (
-          <WorkCard key={group.id} group={group} post={findMatchingPost(group, posts)} lock={lockByGroup.get(group.id) || createLockInfo(null)} mode={mode} />
-        ))}
-      </div>
+      <Filters params={params} />
+      {wizardItems.length ? <Progress doneToday={doneToday} available={wizardItems.length} category={params.category} /> : null}
+      {!((groupsData || []) as FacebookGroup[]).length ? <EmptyGroups /> : null}
+      {((groupsData || []) as FacebookGroup[]).length && !posts.length ? <EmptyPosts /> : null}
+      {wizardItems.length ? <WorkWizard items={wizardItems} /> : ((groupsData || []) as FacebookGroup[]).length && posts.length ? <AllDone /> : null}
     </AdminGuard>
   );
 }
 
-function Filters({ params, mode }: { params: SearchParams; mode: string }) {
+function Filters({ params }: { params: SearchParams }) {
   return (
-    <form className="grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm xl:grid-cols-[1fr_180px_170px_150px_210px_auto]">
+    <form className="grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm xl:grid-cols-[1fr_220px_190px_auto_auto]">
       <label className="sr-only" htmlFor="q">Suche nach Gruppenname</label>
       <input id="q" name="q" placeholder="Suche nach Gruppenname" defaultValue={params.q || ""} className="rounded-md border border-slate-300 px-3 py-2" />
       <select name="category" defaultValue={params.category || ""} className="rounded-md border border-slate-300 px-3 py-2">
@@ -121,19 +112,32 @@ function Filters({ params, mode }: { params: SearchParams; mode: string }) {
         <option value="">Alle Accounts</option>
         {facebookGroupOwners.map((owner) => <option key={owner} value={owner}>{owner}</option>)}
       </select>
-      <select name="status" defaultValue={params.status || ""} className="rounded-md border border-slate-300 px-3 py-2">
-        <option value="">Aktive Gruppen</option>
-        {facebookGroupStatuses.map((status) => <option key={status} value={status}>{facebookGroupStatusLabel(status)}</option>)}
-      </select>
-      <select name="view" defaultValue={mode} className="rounded-md border border-slate-300 px-3 py-2">
-        <option value="open">Jetzt offen</option>
-        <option value="done">In den letzten 24 Std. erledigt</option>
-        <option value="all">Alle Gruppen</option>
-      </select>
       <button className="inline-flex min-h-10 items-center justify-center rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white">
         <Search className="mr-2 size-4" /> Filtern
       </button>
+      <Link href="/admin/arbeiten" className="inline-flex min-h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-950 hover:border-cyan-700 hover:text-cyan-800">
+        Zurücksetzen
+      </Link>
     </form>
+  );
+}
+
+function Progress({ doneToday, available, category }: { doneToday: number; available: number; category?: string }) {
+  return (
+    <div className="mt-6 grid gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-3">
+      <Stat label="Heute erledigt" value={doneToday} />
+      <Stat label="Noch verfügbar" value={available} />
+      <Stat label="Aktuelle Kategorie" value={category || "Alle"} />
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-md bg-slate-50 p-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-1 text-xl font-semibold text-slate-950">{value}</p>
+    </div>
   );
 }
 
@@ -151,30 +155,26 @@ function normalize(value?: string | null) {
   return String(value || "").trim().toLowerCase();
 }
 
-function createLockMap(groups: FacebookGroup[], logs: WorkLog[]) {
-  const map = new Map<string, ReturnType<typeof createLockInfo>>();
-  for (const group of groups) map.set(group.id, createLockInfo(group.last_opened_at));
+function createLatestPostedMap(logs: WorkLog[]) {
+  const map = new Map<string, string>();
   for (const log of logs) {
     if (!log.group_id) continue;
     const current = map.get(log.group_id);
-    const currentTime = current?.lastWorkedAt ? new Date(current.lastWorkedAt).getTime() : 0;
+    const currentTime = current ? new Date(current).getTime() : 0;
     const logTime = new Date(log.worked_at || log.created_at).getTime();
-    if (logTime > currentTime) map.set(log.group_id, createLockInfo(log.worked_at || log.created_at));
+    if (logTime > currentTime) map.set(log.group_id, log.worked_at || log.created_at);
   }
   return map;
 }
 
-function createLockInfo(lastWorkedAt: string | null) {
-  if (!lastWorkedAt) return { locked: false, lastWorkedAt: null, availableAt: null, remainingLabel: null };
-  const workedTime = new Date(lastWorkedAt).getTime();
-  const availableTime = workedTime + lockHours * 60 * 60 * 1000;
-  const remainingMs = availableTime - Date.now();
-  return {
-    locked: remainingMs > 0,
-    lastWorkedAt,
-    availableAt: new Date(availableTime).toISOString(),
-    remainingLabel: remainingMs > 0 ? formatRemaining(remainingMs) : null,
-  };
+function isLocked(lastPostedAt: string | null, cutoff: string) {
+  return Boolean(lastPostedAt && new Date(lastPostedAt).getTime() >= new Date(cutoff).getTime());
+}
+
+function groupSortValue(group: FacebookGroup, latestPostedByGroup: Map<string, string>) {
+  const posted = latestPostedByGroup.get(group.id);
+  if (posted) return new Date(posted).getTime();
+  return -1;
 }
 
 function EmptyGroups() {
@@ -197,11 +197,21 @@ function EmptyPosts() {
   );
 }
 
-function formatRemaining(ms: number) {
-  const totalMinutes = Math.max(1, Math.ceil(ms / 60000));
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-  if (hours && minutes) return `${hours} Std. ${minutes} Min.`;
-  if (hours) return `${hours} Std.`;
-  return `${minutes} Min.`;
+function AllDone() {
+  return (
+    <div className="mt-6 rounded-lg border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <h2 className="text-2xl font-semibold text-slate-950">Für heute ist alles erledigt</h2>
+      <p className="mx-auto mt-3 max-w-2xl leading-7 text-slate-650">
+        Es sind aktuell keine verfügbaren Gruppen vorhanden. Gruppen werden automatisch nach 24 Stunden wieder freigegeben.
+      </p>
+      <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+        <Link href="/admin/beitraege?tab=gruppen" className="inline-flex min-h-11 items-center justify-center rounded-md bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800">
+          Alle Gruppen ansehen
+        </Link>
+        <Link href="/admin/arbeiten" className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:border-cyan-700 hover:text-cyan-800">
+          Filter zurücksetzen
+        </Link>
+      </div>
+    </div>
+  );
 }

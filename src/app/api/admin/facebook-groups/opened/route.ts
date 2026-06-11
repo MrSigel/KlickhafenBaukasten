@@ -9,7 +9,6 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => null);
   const id = typeof body?.id === "string" ? body.id : "";
-  const postId = typeof body?.postId === "string" ? body.postId : null;
   if (!id) return NextResponse.json({ error: "Gruppen-ID fehlt." }, { status: 400 });
 
   const supabase = getSupabaseAdmin();
@@ -21,11 +20,5 @@ export async function POST(request: Request) {
     .eq("id", id);
 
   if (error) return NextResponse.json({ error: "Öffnung konnte nicht gespeichert werden." }, { status: 500 });
-  await supabase.from("work_logs").insert({
-    group_id: id,
-    post_id: postId,
-    action: "opened",
-    worked_at: new Date().toISOString(),
-  });
   return NextResponse.json({ ok: true, open_count: nextCount });
 }

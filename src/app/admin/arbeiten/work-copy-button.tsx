@@ -3,7 +3,7 @@
 import { ClipboardCopy } from "lucide-react";
 import { useRef, useState } from "react";
 
-export function WorkCopyButton({ postId, text, label, copiedLabel, trackCopy = false }: { postId?: string; text: string; label: string; copiedLabel: string; trackCopy?: boolean }) {
+export function WorkCopyButton({ postId, text, label, copiedLabel, trackCopy = false, onCopied }: { postId?: string; text: string; label: string; copiedLabel: string; trackCopy?: boolean; onCopied?: () => void }) {
   const [state, setState] = useState<"idle" | "copied" | "error">("idle");
   const fallbackRef = useRef<HTMLTextAreaElement>(null);
 
@@ -19,6 +19,7 @@ export function WorkCopyButton({ postId, text, label, copiedLabel, trackCopy = f
         });
       }
       setState("copied");
+      onCopied?.();
       window.setTimeout(() => setState("idle"), 1800);
     } catch {
       fallbackRef.current?.focus();
