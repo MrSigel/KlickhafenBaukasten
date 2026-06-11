@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { logActivity } from "@/lib/server/activity";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 
@@ -46,6 +47,7 @@ export async function deleteInquiryAction(formData: FormData) {
 export async function createCustomerAction(formData: FormData) {
   "use server";
   const supabase = getSupabaseAdmin();
+  const receivedAmountCents = parseEuroToCents(formData.get("received_amount"));
   const { data } = await supabase.from("customers").insert({
     type: String(formData.get("type") || "business"),
     first_name: String(formData.get("first_name") || ""),
@@ -59,6 +61,7 @@ export async function createCustomerAction(formData: FormData) {
     city: String(formData.get("city") || ""),
     country: String(formData.get("country") || "Deutschland"),
     notes: String(formData.get("notes") || ""),
+    received_amount_cents: receivedAmountCents,
     status: "active",
   }).select("id, email, company").single();
   if (data) {
@@ -73,6 +76,71 @@ export async function createCustomerAction(formData: FormData) {
   }
   revalidatePath("/admin/kunden");
   revalidatePath("/admin/archiv");
+}
+
+export async function updateCustomerReceivedAmountAction(formData: FormData) {
+  "use server";
+  const id = String(formData.get("id") || "");
+  const receivedAmountCents = parseEuroToCents(formData.get("received_amount"));
+  if (!id) return;
+
+  const supabase = getSupabaseAdmin();
+  const { data: customer } = await supabase
+    .from("customers")
+    .select("id, email, company, first_name, last_name")
+    .eq("id", id)
+    .single();
+
+  await supabase.from("customers").update({ received_amount_cents: receivedAmountCents }).eq("id", id);
+  await logActivity({
+    action: "updated",
+    entityType: "customer",
+    entityId: id,
+    title: "Erhaltenen Betrag aktualisiert",
+    description: customer?.company || customer?.email || "Kunde",
+    metadata: { received_amount_cents: receivedAmountCents },
+  });
+  revalidatePath("/admin/kunden");
+  revalidatePath(`/admin/kunden/${id}`);
+  revalidatePath("/admin/archiv");
+}
+
+export async function deleteCustomerAction(formData: FormData) {
+  "use server";
+  const id = String(formData.get("id") || "");
+  if (!id) redirect("/admin/kunden?error=Kunden-ID fehlt.");
+
+  const supabase = getSupabaseAdmin();
+  const [{ count: offersCount }, { count: invoicesCount }, { data: customer }] = await Promise.all([
+    supabase.from("offers").select("id", { count: "exact", head: true }).eq("customer_id", id),
+    supabase.from("invoices").select("id", { count: "exact", head: true }).eq("customer_id", id),
+    supabase.from("customers").select("id, email, company, first_name, last_name").eq("id", id).single(),
+  ]);
+
+  if ((offersCount || 0) > 0 || (invoicesCount || 0) > 0) {
+    redirect(`/admin/kunden/${id}?error=${encodeURIComponent("Kunde kann nicht gelöscht werden, solange Angebote oder Rechnungen vorhanden sind.")}`);
+  }
+
+  await supabase.from("customers").delete().eq("id", id);
+  await logActivity({
+    action: "deleted",
+    entityType: "customer",
+    entityId: id,
+    title: "Kunde gelöscht",
+    description: customer?.company || customer?.email || "Kunde wurde gelöscht.",
+    metadata: customer || {},
+  });
+  revalidatePath("/admin/kunden");
+  revalidatePath("/admin/archiv");
+  redirect("/admin/kunden?success=Kunde wurde gelöscht.");
+}
+
+function parseEuroToCents(value: FormDataEntryValue | null) {
+  const normalized = String(value || "0")
+    .replace(/\./g, "")
+    .replace(",", ".")
+    .replace(/[^\d.]/g, "");
+  return Math.max(0, Math.round(Number(normalized || 0) * 100));
 }
 
 export async function updateSettingsAction(formData: FormData) {

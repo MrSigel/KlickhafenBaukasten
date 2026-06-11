@@ -1,10 +1,10 @@
-import { AdminHeader } from "@/components/admin/ui";
+import { AdminHeader, Money } from "@/components/admin/ui";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { AdminGuard } from "../guard";
 import { createCustomerAction } from "../lib";
 import Link from "next/link";
 
-export default async function AdminCustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+export default async function AdminCustomersPage({ searchParams }: { searchParams: Promise<{ q?: string; success?: string; error?: string }> }) {
   const params = await searchParams;
   const supabase = getSupabaseAdmin();
   let query = supabase.from("customers").select("*").order("created_at", { ascending: false });
@@ -14,6 +14,8 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
   return (
     <AdminGuard>
       <AdminHeader title="Kunden" text="Kunden erstellen, suchen und Stammdaten öffnen." />
+      {params.success ? <p className="mb-4 rounded-md bg-emerald-50 p-4 text-emerald-800">{params.success}</p> : null}
+      {params.error ? <p className="mb-4 rounded-md bg-red-50 p-4 text-red-800">{params.error}</p> : null}
       <form className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
         <input name="q" placeholder="Suche nach Name, Firma, E-Mail oder Website" className="w-full rounded-md border border-slate-300 px-3 py-2" />
       </form>
@@ -23,6 +25,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
             <Link key={row.id} href={`/admin/kunden/${row.id}`} className="block rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition hover:border-cyan-700">
               <p className="font-semibold text-slate-950">{row.company || `${row.first_name || ""} ${row.last_name || ""}`.trim() || row.email}</p>
               <p className="mt-2 text-sm text-slate-600">{row.email} · {row.website_url || "Keine Website"}</p>
+              <p className="mt-2 text-sm font-semibold text-emerald-700">Bereits erhalten: <Money cents={row.received_amount_cents || 0} /></p>
             </Link>
           ))}
           {!data?.length ? <p className="rounded-lg bg-white p-6 text-slate-600 shadow-sm">Keine Kunden gefunden.</p> : null}
@@ -35,6 +38,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
             ))}
             <input name="country" defaultValue="Deutschland" className="rounded-md border border-slate-300 px-3 py-2" />
             <select name="type" className="rounded-md border border-slate-300 px-3 py-2"><option value="business">Geschäftskunde</option><option value="private">Privatkunde</option></select>
+            <input name="received_amount" inputMode="decimal" placeholder="Bereits erhalten (€)" className="rounded-md border border-slate-300 px-3 py-2" />
             <textarea name="notes" placeholder="Notizen" className="min-h-24 rounded-md border border-slate-300 px-3 py-2" />
             <button className="rounded-md bg-cyan-700 px-4 py-3 text-sm font-semibold text-white">Kunde speichern</button>
           </div>
