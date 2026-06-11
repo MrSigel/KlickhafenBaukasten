@@ -20,8 +20,8 @@ const systemItems = [
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-slate-100 lg:grid lg:grid-cols-[260px_1fr]">
-      <aside className="flex flex-col border-b border-slate-200 bg-slate-950 p-4 text-white lg:min-h-screen lg:border-b-0">
+    <div className="flex h-dvh flex-col overflow-hidden bg-slate-100 lg:grid lg:grid-cols-[260px_minmax(0,1fr)]">
+      <aside className="flex max-h-[42dvh] shrink-0 flex-col overflow-y-auto border-b border-slate-200 bg-slate-950 p-4 text-white lg:h-dvh lg:max-h-none lg:border-b-0">
         <div className="text-xl font-semibold">Klickhafen</div>
         <nav className="mt-6 grid flex-1 gap-2 sm:grid-cols-2 lg:grid-cols-1 lg:content-start">
           {crmItems.map((item) => {
@@ -50,7 +50,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           </form>
         </nav>
       </aside>
-      <main className="min-w-0 p-4 sm:p-6 lg:p-8">{children}</main>
+      <main className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:h-dvh lg:p-8">{children}</main>
     </div>
   );
 }

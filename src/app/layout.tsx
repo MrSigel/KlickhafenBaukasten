@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { CookieConsent } from "@/components/cookie-consent";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
 import { MotionProvider } from "@/components/motion-provider";
+import { SiteChrome } from "@/components/site-chrome";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -84,10 +82,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <MotionProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <CookieConsent />
+          <SiteChrome>{children}</SiteChrome>
         </MotionProvider>
         <Analytics />
         <SpeedInsights />
