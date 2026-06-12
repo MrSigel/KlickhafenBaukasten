@@ -25,6 +25,7 @@ type ScraperResult = {
   city: string | null;
   website: string | null;
   email: string | null;
+  phone: string | null;
   source: string | null;
   status: string;
   notes: string | null;
@@ -45,7 +46,7 @@ export default async function AdminScraperPage({ searchParams }: { searchParams:
     <AdminGuard>
       <AdminHeader
         title="Scraper"
-        text="Sichere lokale Lead-Recherche über öffentlich erreichbare Websites."
+        text="Lokale Unternehmen per Suchbegriff finden und öffentlich sichtbare Kontaktdaten übernehmen."
       />
 
       {params.success ? <p className="mb-4 rounded-md bg-emerald-50 p-4 text-emerald-800">{params.success}</p> : null}
@@ -62,25 +63,13 @@ export default async function AdminScraperPage({ searchParams }: { searchParams:
       </div>
 
       <form action={runScraperAction} className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-950">Website-E-Mail-Finder</h2>
+        <h2 className="text-lg font-semibold text-slate-950">Lokale Suche</h2>
         <p className="mt-2 text-sm leading-6 text-slate-600">
-          Gib eine Website-URL ein. Der Finder prüft Startseite, Kontakt, Impressum, Datenschutz und ähnliche öffentliche Unterseiten.
+          Gib nur einen Suchbegriff ein, z. B. „Fahrschule Castrop-Rauxel“. Es werden wenige öffentliche Websites geprüft und nur Name, Website, E-Mail und optional Telefonnummer gespeichert.
         </p>
-        <div className="mt-5 grid gap-3 lg:grid-cols-2">
-          <Field label="Website-URL">
-            <input name="website" required placeholder="https://beispiel.de" className="input" />
-          </Field>
-          <Field label="Unternehmensname optional">
-            <input name="business_name" placeholder="Firma" className="input" />
-          </Field>
-          <Field label="Suchbegriff optional">
-            <input name="query" placeholder="z. B. Fahrschule" className="input" />
-          </Field>
-          <Field label="Branche optional">
-            <input name="industry" placeholder="z. B. Fahrschule" className="input" />
-          </Field>
-          <Field label="Ort optional">
-            <input name="city" placeholder="z. B. Castrop-Rauxel" className="input" />
+        <div className="mt-5">
+          <Field label="Suchbegriff">
+            <input name="query" required placeholder="Fahrschule Castrop-Rauxel" className="input" />
           </Field>
         </div>
         <button className="mt-5 inline-flex min-h-11 items-center justify-center rounded-md bg-cyan-700 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-800">
@@ -103,6 +92,7 @@ export default async function AdminScraperPage({ searchParams }: { searchParams:
                     <th className="px-4 py-3">Ort</th>
                     <th className="px-4 py-3">Website</th>
                     <th className="px-4 py-3">E-Mail</th>
+                    <th className="px-4 py-3">Telefon</th>
                     <th className="px-4 py-3">Quelle</th>
                     <th className="px-4 py-3">Status</th>
                     <th className="px-4 py-3">Aktion</th>
@@ -122,6 +112,7 @@ export default async function AdminScraperPage({ searchParams }: { searchParams:
                         ) : "-"}
                       </td>
                       <td className="px-4 py-4 font-semibold text-slate-950">{result.email || <span className="text-slate-500">Keine E-Mail gefunden</span>}</td>
+                      <td className="px-4 py-4 text-slate-600">{result.phone || "-"}</td>
                       <td className="max-w-64 px-4 py-4 text-slate-600">
                         {result.source ? <span className="break-all">{result.source}</span> : "-"}
                         {result.notes ? <p className="mt-1 text-xs text-slate-500">{result.notes}</p> : null}

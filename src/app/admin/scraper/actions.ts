@@ -9,52 +9,93 @@ import { isAdminAuthenticated } from "@/lib/server/admin-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 
 const maxPages = 8;
+const maxSearchResults = 5;
 const fetchTimeoutMs = 6000;
 const interestingPathPattern = /(kontakt|contact|impressum|imprint|datenschutz|privacy|legal|ueber-uns|über-uns|about)/i;
 const ignoredEmailPattern = /@(example\.|sentry\.|w3\.|schema\.|domain\.|test\.|localhost)|noreply|no-reply|donotreply|do-not-reply/i;
+const ignoredSearchHostPattern = /(google|bing|duckduckgo|facebook|instagram|linkedin|youtube|x\.com|twitter|gelbeseiten|11880|werkenntdenbesten|golocal|yelp|cylex|meinestadt|dasoertliche|telefonbuch)\./i;
 
 type ScrapeResult = {
   email: string | null;
+  phone?: string | null;
+  businessName?: string | null;
+  website?: string | null;
   source: string;
   status: "new" | "failed";
   notes?: string;
 };
 
+type SearchCandidate = {
+  title: string;
+  url: URL;
+};
+
 export async function runScraperAction(formData: FormData) {
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
 
-  const websiteInput = String(formData.get("website") || "").trim();
   const query = String(formData.get("query") || "").trim();
-  const businessName = String(formData.get("business_name") || "").trim();
-  const industry = String(formData.get("industry") || "").trim();
-  const city = String(formData.get("city") || "").trim();
+  if (!query || query.length < 3) redirect(`/admin/scraper?error=${encodeURIComponent("Bitte Suchbegriff eingeben.")}`);
 
   const supabase = getSupabaseAdmin();
-  let website = "";
   let results: ScrapeResult[] = [];
 
   try {
-    const url = normalizeWebsiteUrl(websiteInput);
-    await assertPublicHttpUrl(url);
-    website = url.toString();
-    results = await findEmailsOnWebsite(url);
+    const candidates = await findWebsiteCandidates(query);
+    if (!candidates.length) throw new Error("Keine passenden Websites gefunden.");
+
+    for (const candidate of candidates) {
+      try {
+        await assertPublicHttpUrl(candidate.url);
+        const websiteResults = await findEmailsOnWebsite(candidate.url);
+        const firstPhone = websiteResults.find((item) => item.phone)?.phone || null;
+
+        if (websiteResults.length) {
+          results.push(...websiteResults.map((item) => ({
+            ...item,
+            businessName: candidate.title,
+            website: candidate.url.toString(),
+            phone: item.phone || firstPhone,
+          })));
+        } else {
+          results.push({
+            email: null,
+            phone: firstPhone,
+            businessName: candidate.title,
+            website: candidate.url.toString(),
+            source: candidate.url.toString(),
+            status: "new",
+            notes: "Keine E-Mail gefunden.",
+          });
+        }
+      } catch {
+        results.push({
+          email: null,
+          businessName: candidate.title,
+          website: candidate.url.toString(),
+          source: candidate.url.toString(),
+          status: "failed",
+          notes: "Website konnte nicht abgerufen werden.",
+        });
+      }
+    }
   } catch (error) {
     results = [{
       email: null,
-      source: websiteInput,
+      source: query,
       status: "failed",
-      notes: error instanceof Error ? error.message : "Website konnte nicht abgerufen werden.",
+      notes: error instanceof Error ? error.message : "Suche konnte nicht ausgeführt werden.",
     }];
   }
 
-  const rows = results.length ? results : [{ email: null, source: website || websiteInput, status: "new" as const, notes: "Keine E-Mail gefunden." }];
+  const rows = results.length ? results : [{ email: null, source: query, status: "new" as const, notes: "Keine E-Mail gefunden." }];
   const { error } = await supabase.from("scraper_results").insert(rows.map((result) => ({
     query,
-    business_name: businessName,
-    industry,
-    city,
-    website: website || websiteInput,
+    business_name: result.businessName || "",
+    industry: inferIndustry(query),
+    city: inferCity(query),
+    website: result.website || "",
     email: result.email,
+    phone: result.phone || "",
     source: result.source,
     status: result.status,
     notes: result.notes || (result.email ? "" : "Keine E-Mail gefunden."),
@@ -66,8 +107,8 @@ export async function runScraperAction(formData: FormData) {
     action: "created",
     entityType: "scraper_result",
     title: "Scraper ausgeführt",
-    description: businessName || website || websiteInput,
-    metadata: { website, query, industry, city, results: rows.length },
+    description: query,
+    metadata: { query, results: rows.length },
   });
 
   revalidatePath("/admin/scraper");
@@ -106,6 +147,7 @@ export async function importScraperResultAction(formData: FormData) {
     email: result.email,
     website_url: normalizedWebsite || result.website || "",
     city: result.city || "",
+    phone: result.phone || "",
     country: "Deutschland",
     industry: result.industry || "",
     lead_source: "scraper",
@@ -130,6 +172,49 @@ export async function importScraperResultAction(formData: FormData) {
   revalidatePath("/admin/kunden");
   revalidatePath("/admin/arbeiten");
   redirect("/admin/scraper?success=Kunde wurde übernommen.");
+}
+
+async function findWebsiteCandidates(query: string) {
+  const searchUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+  const html = await fetchHtml(searchUrl);
+  const candidates: SearchCandidate[] = [];
+  const resultPattern = /<a[^>]+class="result__a"[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+
+  for (const match of html.matchAll(resultPattern)) {
+    if (candidates.length >= maxSearchResults) break;
+    const href = decodeHtmlEntities(stripTags(match[1] || ""));
+    const title = cleanText(match[2] || "");
+    const url = normalizeSearchResultUrl(href);
+    if (!url) continue;
+    if (ignoredSearchHostPattern.test(url.hostname)) continue;
+    if (candidates.some((candidate) => candidate.url.hostname === url.hostname)) continue;
+    candidates.push({ title: title || url.hostname.replace(/^www\./, ""), url });
+  }
+
+  return candidates;
+}
+
+function normalizeSearchResultUrl(value: string) {
+  try {
+    const raw = new URL(value, "https://duckduckgo.com");
+    const redirected = raw.searchParams.get("uddg");
+    const target = redirected ? new URL(decodeURIComponent(redirected)) : raw;
+    if (!["http:", "https:"].includes(target.protocol)) return null;
+    target.hash = "";
+    target.search = "";
+    return target;
+  } catch {
+    return null;
+  }
+}
+
+function inferIndustry(query: string) {
+  return query.trim().split(/\s+/)[0] || "";
+}
+
+function inferCity(query: string) {
+  const parts = query.trim().split(/\s+/);
+  return parts.length > 1 ? parts.slice(1).join(" ") : "";
 }
 
 export async function ignoreScraperResultAction(formData: FormData) {
@@ -189,12 +274,14 @@ async function findEmailsOnWebsite(startUrl: URL) {
   const visited = new Set<string>();
   const queue = [startUrl.toString()];
   const found = new Map<string, string>();
+  let phone: string | null = null;
 
   while (queue.length && visited.size < maxPages) {
     const current = queue.shift();
     if (!current || visited.has(current)) continue;
     visited.add(current);
     const html = await fetchHtml(current);
+    phone ||= extractPhone(html);
     for (const email of extractEmails(html)) {
       if (!ignoredEmailPattern.test(email)) found.set(email.toLowerCase(), current);
     }
@@ -203,7 +290,7 @@ async function findEmailsOnWebsite(startUrl: URL) {
     }
   }
 
-  return Array.from(found.entries()).map(([email, source]) => ({ email, source, status: "new" as const }));
+  return Array.from(found.entries()).map(([email, source]) => ({ email, phone, source, status: "new" as const }));
 }
 
 async function fetchHtml(url: string) {
@@ -228,6 +315,15 @@ function extractEmails(html: string) {
   const mailtoMatches = Array.from(decoded.matchAll(/mailto:([^"'?\s<>]+)/gi)).map((match) => decodeURIComponent(match[1] || ""));
   const textMatches = decoded.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) || [];
   return Array.from(new Set(mailtoMatches.concat(textMatches).map((email) => email.trim().replace(/[.,;:)]+$/, "").toLowerCase())));
+}
+
+function extractPhone(html: string) {
+  const decoded = cleanText(html);
+  const matches = decoded.match(/(?:\+49|0)[\d\s()./-]{7,}/g) || [];
+  const cleaned = matches
+    .map((value) => value.replace(/\s+/g, " ").trim())
+    .filter((value) => value.replace(/\D/g, "").length >= 8 && value.replace(/\D/g, "").length <= 16);
+  return cleaned[0] || null;
 }
 
 function extractInterestingLinks(html: string, baseUrl: URL, origin: string) {
@@ -257,4 +353,12 @@ function decodeHtmlEntities(value: string) {
     .replace(/\s*\[at\]\s*|\s*\(at\)\s*/gi, "@")
     .replace(/\s*\[dot\]\s*|\s*\(dot\)\s*/gi, ".")
     .replace(/&amp;/gi, "&");
+}
+
+function stripTags(value: string) {
+  return value.replace(/<[^>]*>/g, " ");
+}
+
+function cleanText(value: string) {
+  return decodeHtmlEntities(stripTags(value)).replace(/\s+/g, " ").trim();
 }
