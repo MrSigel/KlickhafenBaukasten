@@ -123,6 +123,18 @@ export default async function AdminScraperPage({ searchParams }: { searchParams:
                           {result.email && result.status === "new" ? (
                             <form action={importScraperResultAction}>
                               <input type="hidden" name="id" value={result.id} />
+                              <div className="mb-2 rounded-md bg-slate-50 p-2 text-xs text-slate-700">
+                                <p className="mb-2 font-semibold text-slate-950">In Kunden speichern:</p>
+                                <div className="grid gap-1">
+                                  <CheckOption name="include_email" label="E-Mail" checked disabled />
+                                  <CheckOption name="include_company" label="Name" checked={Boolean(result.business_name)} disabled={!result.business_name} />
+                                  <CheckOption name="include_website" label="Website" checked={Boolean(result.website)} disabled={!result.website} />
+                                  <CheckOption name="include_phone" label="Telefon" checked={Boolean(result.phone)} disabled={!result.phone} />
+                                  <CheckOption name="include_industry" label="Branche" checked={Boolean(result.industry)} disabled={!result.industry} />
+                                  <CheckOption name="include_city" label="Ort" checked={Boolean(result.city)} disabled={!result.city} />
+                                  <CheckOption name="include_notes" label="Notiz" checked={Boolean(result.notes)} disabled={!result.notes} />
+                                </div>
+                              </div>
                               <button className="w-full rounded-md bg-cyan-700 px-3 py-2 text-xs font-semibold text-white hover:bg-cyan-800">
                                 In Kunden übernehmen
                               </button>
@@ -160,6 +172,22 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <label className="block">
       <span className="text-sm font-semibold text-slate-800">{label}</span>
       <div className="mt-2">{children}</div>
+    </label>
+  );
+}
+
+function CheckOption({ name, label, checked, disabled }: { name: string; label: string; checked: boolean; disabled?: boolean }) {
+  return (
+    <label className={`flex items-center gap-2 ${disabled ? "text-slate-400" : ""}`}>
+      <input
+        type="checkbox"
+        name={name}
+        defaultChecked={checked}
+        disabled={disabled}
+        className="size-4 rounded border-slate-300 text-cyan-700 focus:ring-cyan-700"
+      />
+      <span>{label}</span>
+      {disabled ? <input type="hidden" name={name} value={checked ? "on" : ""} disabled={!checked} /> : null}
     </label>
   );
 }

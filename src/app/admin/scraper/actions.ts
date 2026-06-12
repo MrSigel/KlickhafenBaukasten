@@ -125,8 +125,16 @@ export async function importScraperResultAction(formData: FormData) {
   const { data: result } = await supabase.from("scraper_results").select("*").eq("id", id).single();
   if (!result) redirect("/admin/scraper?error=Ergebnis konnte nicht geladen werden.");
   if (!result.email) redirect("/admin/scraper?error=Keine E-Mail gefunden.");
+  const includeCompany = formData.get("include_company") === "on";
+  const includeWebsite = formData.get("include_website") === "on";
+  const includeEmail = formData.get("include_email") === "on";
+  const includePhone = formData.get("include_phone") === "on";
+  const includeIndustry = formData.get("include_industry") === "on";
+  const includeCity = formData.get("include_city") === "on";
+  const includeNotes = formData.get("include_notes") === "on";
+  if (!includeEmail) redirect("/admin/scraper?error=E-Mail muss für Kunden übernommen werden.");
 
-  const normalizedWebsite = normalizeWebsiteForCompare(result.website || "");
+  const normalizedWebsite = includeWebsite ? normalizeWebsiteForCompare(result.website || "") : "";
   let duplicateQuery = supabase.from("customers").select("id, email, website_url").limit(1);
   if (normalizedWebsite) {
     duplicateQuery = duplicateQuery.or(`email.eq.${result.email},website_url.eq.${normalizedWebsite},website_url.eq.${result.website}`);
@@ -143,17 +151,17 @@ export async function importScraperResultAction(formData: FormData) {
 
   const { data: customer, error } = await supabase.from("customers").insert({
     type: "business",
-    company: result.business_name || "",
+    company: includeCompany ? result.business_name || "" : "",
     email: result.email,
-    website_url: normalizedWebsite || result.website || "",
-    city: result.city || "",
-    phone: result.phone || "",
+    website_url: includeWebsite ? normalizedWebsite || result.website || "" : "",
+    city: includeCity ? result.city || "" : "",
+    phone: includePhone ? result.phone || "" : "",
     country: "Deutschland",
-    industry: result.industry || "",
+    industry: includeIndustry ? result.industry || "" : "",
     lead_source: "scraper",
     local_outreach_status: "open",
     status: "active",
-    notes: result.notes || "",
+    notes: includeNotes ? result.notes || "" : "",
   }).select("id, email, company").single();
 
   if (error || !customer) redirect("/admin/scraper?error=Kunde konnte nicht erstellt werden.");
