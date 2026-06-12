@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Mail, Search, Share2 } from "lucide-react";
 import { AdminHeader, AdminLink } from "@/components/admin/ui";
 import { getSupabaseAdmin } from "@/lib/server/supabase";
 import { AdminGuard } from "../guard";
 import { WorkWizard } from "./work-wizard";
+import { LocalEmailWizard, type LocalEmailCustomer } from "./local-email-wizard";
 import { type AdminPost } from "@/lib/posts";
 import {
   type FacebookGroup,
@@ -21,6 +22,7 @@ type SearchParams = {
   q?: string;
   category?: string;
   owner?: string;
+  tab?: string;
 };
 
 type WorkLog = {
@@ -32,6 +34,8 @@ type WorkLog = {
 };
 
 const lockHours = 24;
+const localLockHours = 48;
+const localExcludedStatuses = new Set(["not_interested", "customer", "archived"]);
 
 const categoryFallbacks: Record<string, string[]> = {
   Webdesign: ["Webdesign", "Webentwicklung", "Allgemein"],
@@ -52,6 +56,7 @@ const categoryFallbacks: Record<string, string[]> = {
 
 export default async function AdminWorkPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
+  const activeTab = params.tab === "lokal" ? "lokal" : "digital";
   const cutoff = new Date(Date.now() - lockHours * 60 * 60 * 1000).toISOString();
   const supabase = getSupabaseAdmin();
 
@@ -68,10 +73,11 @@ export default async function AdminWorkPage({ searchParams }: { searchParams: Pr
   if (params.owner) groupsQuery = groupsQuery.eq("account_owner", params.owner);
   groupsQuery = groupsQuery.eq("status", "active");
 
-  const [{ data: groupsData, error: groupsError }, { data: postsData, error: postsError }, { data: logsData }] = await Promise.all([
+  const [{ data: groupsData, error: groupsError }, { data: postsData, error: postsError }, { data: logsData }, localCustomer] = await Promise.all([
     groupsQuery,
     supabase.from("posts").select("*").eq("status", "active").eq("platform", "facebook").order("created_at", { ascending: false }),
     supabase.from("work_logs").select("group_id, post_id, action, worked_at, created_at").eq("action", "posted"),
+    getNextLocalCustomer(),
   ]);
 
   const posts = (postsData || []) as AdminPost[];
@@ -87,15 +93,36 @@ export default async function AdminWorkPage({ searchParams }: { searchParams: Pr
     <AdminGuard>
       <AdminHeader
         title="Arbeiten"
-        text="Hier findest du passende Facebook-Gruppen mit dem passenden Beitragstext zum schnellen Kopieren und Posten."
+        text="Arbeite digitale Facebook-Gruppen oder lokale E-Mail-Adressen Schritt für Schritt ab."
       />
-      {groupsError || postsError ? <p className="mb-4 rounded-md bg-red-50 p-4 text-red-800">Daten konnten nicht geladen werden.</p> : null}
-      <Filters params={params} />
-      {wizardItems.length ? <Progress doneToday={doneToday} available={wizardItems.length} category={params.category} /> : null}
-      {!((groupsData || []) as FacebookGroup[]).length ? <EmptyGroups /> : null}
-      {((groupsData || []) as FacebookGroup[]).length && !posts.length ? <EmptyPosts /> : null}
-      {wizardItems.length ? <WorkWizard items={wizardItems} /> : ((groupsData || []) as FacebookGroup[]).length && posts.length ? <AllDone /> : null}
+      <Tabs activeTab={activeTab} />
+      {activeTab === "digital" ? (
+        <>
+          {groupsError || postsError ? <p className="mb-4 rounded-md bg-red-50 p-4 text-red-800">Daten konnten nicht geladen werden.</p> : null}
+          <Filters params={params} />
+          {wizardItems.length ? <Progress doneToday={doneToday} available={wizardItems.length} category={params.category} /> : null}
+          {!((groupsData || []) as FacebookGroup[]).length ? <EmptyGroups /> : null}
+          {((groupsData || []) as FacebookGroup[]).length && !posts.length ? <EmptyPosts /> : null}
+          {wizardItems.length ? <WorkWizard items={wizardItems} /> : ((groupsData || []) as FacebookGroup[]).length && posts.length ? <AllDone /> : null}
+        </>
+      ) : (
+        <LocalEmailWizard initialCustomer={localCustomer} />
+      )}
     </AdminGuard>
+  );
+}
+
+function Tabs({ activeTab }: { activeTab: "digital" | "lokal" }) {
+  const baseClass = "inline-flex min-h-11 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold transition";
+  return (
+    <div className="mb-6 flex flex-wrap gap-2 rounded-lg border border-slate-200 bg-white p-2 shadow-sm">
+      <Link href="/admin/arbeiten" className={`${baseClass} ${activeTab === "digital" ? "bg-slate-950 text-white" : "text-slate-700 hover:bg-slate-100"}`}>
+        <Share2 className="mr-2 size-4" /> Digital
+      </Link>
+      <Link href="/admin/arbeiten?tab=lokal" className={`${baseClass} ${activeTab === "lokal" ? "bg-slate-950 text-white" : "text-slate-700 hover:bg-slate-100"}`}>
+        <Mail className="mr-2 size-4" /> Lokal
+      </Link>
+    </div>
   );
 }
 
@@ -175,6 +202,51 @@ function groupSortValue(group: FacebookGroup, latestPostedByGroup: Map<string, s
   const posted = latestPostedByGroup.get(group.id);
   if (posted) return new Date(posted).getTime();
   return -1;
+}
+
+type LocalCustomerRow = LocalEmailCustomer & {
+  created_at: string;
+  status?: string | null;
+  last_local_email_at?: string | null;
+  local_outreach_status?: string | null;
+};
+
+async function getNextLocalCustomer(): Promise<LocalEmailCustomer | null> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("customers")
+    .select("id, company, email, created_at, status, last_local_email_at, local_outreach_status")
+    .eq("status", "active")
+    .not("email", "is", null)
+    .order("last_local_email_at", { ascending: true, nullsFirst: true })
+    .order("created_at", { ascending: true })
+    .limit(100);
+
+  if (error) return null;
+
+  const cutoff = new Date(Date.now() - localLockHours * 60 * 60 * 1000);
+  const customer = ((data || []) as LocalCustomerRow[])
+    .filter((row) => isLocalCustomerAvailable(row, cutoff))
+    .sort(sortLocalCustomers)[0];
+
+  return customer ? { id: customer.id, company: customer.company, email: customer.email } : null;
+}
+
+function isLocalCustomerAvailable(customer: LocalCustomerRow, cutoff: Date) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email || "")) return false;
+  if (customer.status && customer.status !== "active") return false;
+  if (localExcludedStatuses.has(customer.local_outreach_status || "")) return false;
+  if (!customer.last_local_email_at) return true;
+  return new Date(customer.last_local_email_at).getTime() < cutoff.getTime();
+}
+
+function sortLocalCustomers(a: LocalCustomerRow, b: LocalCustomerRow) {
+  const aLast = a.last_local_email_at ? new Date(a.last_local_email_at).getTime() : 0;
+  const bLast = b.last_local_email_at ? new Date(b.last_local_email_at).getTime() : 0;
+  if (!aLast && bLast) return -1;
+  if (aLast && !bLast) return 1;
+  if (aLast !== bLast) return aLast - bLast;
+  return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
 }
 
 function EmptyGroups() {
