@@ -44,6 +44,9 @@ export function statusLabel(value?: string) {
     overdue: "Überfällig",
     cancelled: "Storniert",
     partially_paid: "Teilweise bezahlt",
+    imported: "Übernommen",
+    ignored: "Ignoriert",
+    failed: "Fehlgeschlagen",
   };
   return value ? labels[value] || value : "Unbekannt";
 }

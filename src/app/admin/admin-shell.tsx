@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Archive, BriefcaseBusiness, ClipboardList, FileText, Home, Images, Inbox, LogOut, Receipt, Settings, Users } from "lucide-react";
+import { Archive, BriefcaseBusiness, ClipboardList, FileSearch, FileText, Home, Images, Inbox, LogOut, Receipt, Settings, Users } from "lucide-react";
 import { logoutAction } from "./actions";
 import { ConfirmWebsiteLink } from "./confirm-website-link";
 
@@ -12,6 +12,7 @@ const crmItems = [
   { href: "/admin/referenzen", label: "Referenzen", icon: Images },
   { href: "/admin/beitraege", label: "Beiträge", icon: ClipboardList },
   { href: "/admin/arbeiten", label: "Arbeiten", icon: BriefcaseBusiness },
+  { href: "/admin/scraper", label: "Scraper", icon: FileSearch },
 ];
 
 const systemItems = [
