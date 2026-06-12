@@ -9,8 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const enPath = isEnglishPath(route) ? route : alternateFor(route, "en");
 
     return {
-    url: `${site.url}${route}`,
-    lastModified: new Date("2026-06-11"),
+      url: `${site.url}${route}`,
+      lastModified: new Date("2026-06-12"),
       changeFrequency: route === "/" || route === "/en" || route.includes("ratgeber") || route.includes("guides") ? "weekly" : "monthly",
       priority: route === "/" || route === "/en" ? 1 : route === "/ratgeber" || route === "/en/guides" ? 0.85 : route.includes("ratgeber/") || route.includes("guides/") ? 0.75 : 0.7,
       alternates: {

@@ -32,13 +32,13 @@ export default function LeistungenPage() {
             },
             {
               title: "Website erstellen lassen",
-              href: "/leistungen/webdesign-webentwicklung",
+              href: "/leistungen/website-erstellen-lassen",
               text: "Neue Websites von 0 auf, passende Seitenstruktur, responsives Design und klare Anfragewege.",
               icon: services[0].icon,
             },
             {
               title: "Landingpage erstellen lassen",
-              href: "/leistungen/webdesign-webentwicklung",
+              href: "/leistungen/landingpage-erstellen-lassen",
               text: "Landingpages und Onepager für Angebote, Dienstleistungen, lokale Kampagnen und konkrete Kontaktanfragen.",
               icon: services[0].icon,
             },

@@ -24,7 +24,7 @@ export function pageMetadata({ title, description, path = "/" }: MetaInput): Met
       siteName: site.name,
       locale: isEnglish ? "en_US" : "de_DE",
       type: "website",
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${site.name} Website-Hilfe` }],
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: isEnglish ? `${site.name} website services` : `${site.name} Website-Leistungen` }],
     },
     twitter: {
       card: "summary_large_image",

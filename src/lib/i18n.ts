@@ -27,6 +27,8 @@ export const routePairs = [
   ["/", "/en"],
   ["/leistungen", "/en/services"],
   ["/leistungen/webdesign-webentwicklung", "/en/services/web-design-development"],
+  ["/leistungen/website-erstellen-lassen", "/en/services/website-creation"],
+  ["/leistungen/landingpage-erstellen-lassen", "/en/services/landing-page-creation"],
   ["/leistungen/website-shop-hilfe", "/en/services/website-shop-help"],
   ["/leistungen/seo-sichtbarkeit", "/en/services/seo-visibility"],
   ["/leistungen/wordpress-hilfe", "/en/services/wordpress-help"],
@@ -106,11 +108,10 @@ export function languageAlternates(path: string) {
 }
 
 export const enNavItems = [
+  { href: "/en", label: "Home" },
   { href: "/en/services", label: "Services" },
   { href: "/en/pricing", label: "Pricing" },
   { href: "/en/why-klickhafen", label: "Why Klickhafen" },
-  { href: "/en/references", label: "References" },
-  { href: "/en/guides", label: "Guides" },
   { href: "/en/contact", label: "Contact" },
 ];
 
@@ -128,6 +129,18 @@ export const enServices: EnCard[] = [
     text: "Complete websites, landing pages, one-pagers, redesigns and custom solutions with or without a website builder.",
     href: "/en/services/web-design-development",
     icon: LayoutTemplate,
+  },
+  {
+    title: "Website Creation",
+    text: "New websites from scratch with clear structure, responsive design, contact paths, SEO basics and a suitable technical setup.",
+    href: "/en/services/website-creation",
+    icon: Globe,
+  },
+  {
+    title: "Landing Page Creation",
+    text: "Focused landing pages and one-pagers for offers, services, campaigns and request-driven communication.",
+    href: "/en/services/landing-page-creation",
+    icon: FileText,
   },
   {
     title: "Website & Shop Help",

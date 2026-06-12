@@ -33,8 +33,8 @@ export function Footer() {
   const services = isEnglish
     ? [
         { href: "/en/services/web-design-development", label: "Web Design & Development" },
-        { href: "/en/services/web-design-development", label: "Website creation" },
-        { href: "/en/services/web-design-development", label: "Landing page creation" },
+        { href: "/en/services/website-creation", label: "Website creation" },
+        { href: "/en/services/landing-page-creation", label: "Landing page creation" },
         { href: "/en/services/wordpress-help", label: "WordPress" },
         { href: "/en/services/shopify-help", label: "Shopify" },
         { href: "/en/services/wix-help", label: "Wix" },
@@ -49,8 +49,8 @@ export function Footer() {
       ]
     : [
         { href: "/leistungen/webdesign-webentwicklung", label: "Webdesign & Webentwicklung" },
-        { href: "/leistungen/webdesign-webentwicklung", label: "Website erstellen lassen" },
-        { href: "/leistungen/webdesign-webentwicklung", label: "Landingpage erstellen lassen" },
+        { href: "/leistungen/website-erstellen-lassen", label: "Website erstellen lassen" },
+        { href: "/leistungen/landingpage-erstellen-lassen", label: "Landingpage erstellen lassen" },
         { href: "/leistungen/wordpress-hilfe", label: "WordPress" },
         { href: "/leistungen/shopify-hilfe", label: "Shopify" },
         { href: "/leistungen/wix-hilfe", label: "Wix" },
@@ -122,7 +122,7 @@ export function Footer() {
                 {item.label}
               </Link>
             ))}
-            <CookieSettingsButton />
+            <CookieSettingsButton label={isEnglish ? "Cookie settings" : "Cookie-Einstellungen"} />
           </div>
         </div>
       </div>

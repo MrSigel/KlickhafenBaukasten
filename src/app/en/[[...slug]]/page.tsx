@@ -70,6 +70,50 @@ const services: Record<string, ServiceContent> = {
       "domain and email connection by agreement",
     ],
   },
+  "website-creation": {
+    title: "Website creation from scratch",
+    metaTitle: "Create a website from scratch | Klickhafen",
+    metaDescription:
+      "New websites from scratch for freelancers and small businesses with WordPress, website builders or custom implementation without a builder.",
+    eyebrow: "Website Creation",
+    intro:
+      "Klickhafen creates complete websites from scratch for freelancers, local businesses and small companies. The setup can use WordPress, a suitable website builder or an individual implementation without a builder, depending on goals, content and future maintenance.",
+    icon: Globe,
+    cta: "Request a new website",
+    tasks: [
+      "new websites from scratch",
+      "clear page structure",
+      "responsive design",
+      "contact paths and forms",
+      "WordPress or website builder setup",
+      "custom implementation without a builder",
+      "basic SEO structure",
+      "domain and email connection by agreement",
+      "handover and understandable next steps",
+    ],
+  },
+  "landing-page-creation": {
+    title: "Landing page creation",
+    metaTitle: "Landing page creation | Klickhafen",
+    metaDescription:
+      "Landing pages and one-pagers created for offers, services and campaigns with clear structure, responsive design, forms and SEO basics.",
+    eyebrow: "Landing Pages",
+    intro:
+      "Klickhafen creates focused landing pages and one-pagers for offers, services and campaigns. The page is structured around one clear goal, a simple request path, responsive display and understandable content.",
+    icon: Globe,
+    cta: "Request a landing page",
+    tasks: [
+      "landing pages from scratch",
+      "one-pagers",
+      "offer and campaign pages",
+      "clear headline and section structure",
+      "contact form or request path",
+      "responsive layout",
+      "SEO basics",
+      "WordPress, website builder or custom implementation",
+      "domain connection by agreement",
+    ],
+  },
   "website-shop-help": {
     title: "Website & shop help",
     metaTitle: "Website & shop help | Klickhafen",
@@ -351,8 +395,8 @@ function ServicesEn() {
       </Section>
       <Section className="bg-slate-50" title="Targeted implementation by system" text="Dedicated pages explain typical work for WordPress, Shopify, Wix, WooCommerce and website builder systems.">
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          <Card title="Website creation" text="New websites from scratch with clear structure, responsive design and practical request paths." href="/en/services/web-design-development" icon={Globe} />
-          <Card title="Landing page creation" text="Landing pages and one-pagers for offers, services, campaigns and focused contact requests." href="/en/services/web-design-development" icon={Globe} />
+          <Card title="Website creation" text="New websites from scratch with clear structure, responsive design and practical request paths." href="/en/services/website-creation" icon={Globe} />
+          <Card title="Landing page creation" text="Landing pages and one-pagers for offers, services, campaigns and focused contact requests." href="/en/services/landing-page-creation" icon={Globe} />
           {enSystemServices.map((service) => <Card key={service.href} {...service} />)}
         </div>
       </Section>
@@ -377,6 +421,25 @@ type EnCardProps = { title: string; text: string; href: string; icon: LucideIcon
 
 function ServiceEn({ page }: { page: ServiceContent }) {
   const Icon = page.icon;
+  const steps = ["Send a request", "Clarify goal and system", "Define scope and priorities", "Implement the agreed work", "Check desktop and mobile", "Handover or next steps"];
+  const faq = [
+    {
+      question: "Can Klickhafen handle a complete project from scratch?",
+      answer: "Yes. Depending on the page, this can include a new website, landing page, shop, redesign, relaunch or targeted improvement of an existing system.",
+    },
+    {
+      question: "Which systems are supported?",
+      answer: "Klickhafen supports WordPress, Shopify, Wix, WooCommerce, Strato, IONOS, Jimdo, Squarespace, Webflow, GoDaddy, One.com, Weebly and similar website builder systems where technically feasible.",
+    },
+    {
+      question: "How is pricing handled?",
+      answer: "The price depends on scope, system and desired implementation. After a short assessment, an individual offer or transparent billing can be agreed.",
+    },
+    {
+      question: "Can an existing website be redesigned?",
+      answer: "Yes. Existing websites can be redesigned, restructured, improved for mobile use or developed further without rebuilding everything unnecessarily.",
+    },
+  ];
   return (
     <>
       <section className="bg-slate-50 py-16 sm:py-20">
@@ -396,6 +459,33 @@ function ServiceEn({ page }: { page: ServiceContent }) {
       </section>
       <Section title="Typical services" text="Support ranges from new websites, shops and relaunches to specific checks, adjustments and improvements for existing systems.">
         <CheckList columns items={page.tasks} />
+      </Section>
+      <Section className="bg-slate-50" title="Process" text="The process stays clear and practical, so content, design and technical implementation fit the actual goal.">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {steps.map((step, index) => (
+            <FadeIn key={step} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <span className="inline-flex size-9 items-center justify-center rounded-md bg-cyan-50 text-sm font-semibold text-cyan-800">{index + 1}</span>
+              <h2 className="mt-4 text-lg font-semibold text-slate-950">{step}</h2>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+      <Section title="Frequently asked questions" text="Short answers about scope, systems, pricing and existing websites.">
+        <div className="grid gap-4 lg:grid-cols-2">
+          {faq.map((item) => (
+            <FadeIn key={item.question} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-950">{item.question}</h2>
+              <p className="mt-3 leading-7 text-slate-650">{item.answer}</p>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+      <Section className="bg-slate-50" title="Related services" text="Useful next steps and related service pages.">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ButtonLink href="/en/services/web-design-development" variant="secondary">Web design & development</ButtonLink>
+          <ButtonLink href="/en/services/website-shop-help" variant="secondary">Website & shop help</ButtonLink>
+          <ButtonLink href="/en/contact" variant="secondary">Contact</ButtonLink>
+        </div>
       </Section>
       <Section className="bg-slate-50" title="Request a project or support" text="Briefly describe whether you need a new website, a relaunch, a shop or help with an existing system.">
         <ButtonLink href="/en/contact">{page.cta}</ButtonLink>
@@ -432,6 +522,27 @@ function BookOpenIcon() {
 
 function GuideEn({ guide }: { guide: (typeof enGuidePages)[number] }) {
   const Icon = guide.icon;
+  const checks = [
+    "check the affected page on desktop and mobile",
+    "test forms, buttons and links",
+    "review system settings and visible error messages",
+    "document what changed before the issue appeared",
+    "avoid risky changes without a backup or clear rollback path",
+  ];
+  const faq = [
+    {
+      question: "Can Klickhafen help with this remotely?",
+      answer: "Yes. Most website, shop and builder tasks can be checked online when the required access and context are available.",
+    },
+    {
+      question: "Do I need technical knowledge?",
+      answer: "No. You can describe the issue or goal in plain language. Klickhafen then checks the practical next steps.",
+    },
+    {
+      question: "Does this guarantee rankings or sales?",
+      answer: "No. Klickhafen works on structure, usability, technical basics and implementation, but does not promise rankings or sales results.",
+    },
+  ];
   return (
     <>
       <section className="bg-slate-50 py-16 sm:py-20">
@@ -450,8 +561,28 @@ function GuideEn({ guide }: { guide: (typeof enGuidePages)[number] }) {
           Klickhafen supports freelancers, small businesses and local companies online when websites, shops or technical foundations need to be checked and improved in a clear way.
         </p>
       </Section>
+      <Section className="bg-slate-50" title="What you can check first" text="A few basic checks often help to narrow down the issue before requesting support.">
+        <CheckList columns items={checks} />
+      </Section>
       <Section className="bg-slate-50" title="When support makes sense" text="Professional help is useful when several systems interact, when changes must remain stable on mobile devices or when the cause is not obvious.">
         <ButtonLink href="/en/contact">Describe your website issue</ButtonLink>
+      </Section>
+      <Section title="Frequently asked questions" text="Short answers for first orientation.">
+        <div className="grid gap-4 lg:grid-cols-2">
+          {faq.map((item) => (
+            <FadeIn key={item.question} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-950">{item.question}</h2>
+              <p className="mt-3 leading-7 text-slate-650">{item.answer}</p>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+      <Section className="bg-slate-50" title="Related services" text="Relevant service pages and next steps.">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ButtonLink href="/en/services" variant="secondary">Services</ButtonLink>
+          <ButtonLink href="/en/services/website-shop-help" variant="secondary">Website & shop help</ButtonLink>
+          <ButtonLink href="/en/contact" variant="secondary">Contact</ButtonLink>
+        </div>
       </Section>
     </>
   );

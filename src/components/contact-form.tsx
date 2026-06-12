@@ -47,6 +47,24 @@ const platforms = [
   "anderes System",
 ];
 
+const platformsEn = [
+  "WordPress",
+  "Elementor",
+  "WooCommerce",
+  "Shopify",
+  "Wix",
+  "Strato",
+  "IONOS",
+  "Jimdo",
+  "Squarespace",
+  "Webflow",
+  "GoDaddy",
+  "One.com",
+  "Weebly",
+  "Shopware by agreement",
+  "other system",
+];
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
@@ -91,6 +109,7 @@ export function ContactForm({ locale = "de" }: { locale?: "de" | "en" }) {
 
   return (
     <form onSubmit={submit} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+      <input type="hidden" name="locale" value={locale} />
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label={isEnglish ? "Salutation" : "Anrede"}>
           <select className={inputClass} name="anrede">
@@ -125,7 +144,7 @@ export function ContactForm({ locale = "de" }: { locale?: "de" | "en" }) {
         </Field>
         <Field label={isEnglish ? "System / platform" : "System / Plattform"}>
           <select className={inputClass} name="system">
-            {platforms.map((platform) => (
+            {(isEnglish ? platformsEn : platforms).map((platform) => (
               <option key={platform}>{platform}</option>
             ))}
           </select>
