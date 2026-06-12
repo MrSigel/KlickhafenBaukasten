@@ -52,13 +52,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Die Anfrage konnte gerade nicht gesendet werden. Bitte kontaktieren Sie mich direkt per E-Mail oder WhatsApp." }, { status: 500 });
     }
 
-    await sendInquiryMail(inquiry);
+    await sendInquiryMail(inquiry).catch((error) => {
+      console.error("Inquiry mail failed after database insert", error);
+    });
 
     return NextResponse.json({
       ok: true,
-      message: "Vielen Dank. Ihre Anfrage wurde erfolgreich gesendet. Ich melde mich zeitnah zurück.",
+      message: "Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.",
     });
   } catch {
-    return NextResponse.json({ ok: false, message: "Die Anfrage konnte gerade nicht gesendet werden. Bitte kontaktieren Sie mich direkt per E-Mail oder WhatsApp." }, { status: 500 });
+    return NextResponse.json({ ok: false, message: "Ihre Nachricht konnte gerade nicht gespeichert werden. Bitte versuchen Sie es erneut." }, { status: 500 });
   }
 }
