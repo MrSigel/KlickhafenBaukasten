@@ -183,8 +183,8 @@ export async function importScraperResultAction(formData: FormData) {
 }
 
 async function findWebsiteCandidates(query: string) {
-  const searchUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-  const html = await fetchHtml(searchUrl);
+  const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+  const html = await fetchSearchHtml(searchUrl);
   const candidates: SearchCandidate[] = [];
   const resultPattern = /<a[^>]+class="result__a"[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
 
@@ -200,6 +200,25 @@ async function findWebsiteCandidates(query: string) {
   }
 
   return candidates;
+}
+
+async function fetchSearchHtml(url: string) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), fetchTimeoutMs);
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; KlickhafenAdminEmailFinder/1.0)" },
+      redirect: "follow",
+    });
+    const finalUrl = new URL(response.url);
+    if (finalUrl.hostname !== "html.duckduckgo.com") throw new Error("Suche konnte nicht ausgeführt werden.");
+    const contentType = response.headers.get("content-type") || "";
+    if (!response.ok || !contentType.includes("text/html")) throw new Error("Suche konnte nicht ausgeführt werden.");
+    return await response.text();
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function normalizeSearchResultUrl(value: string) {
