@@ -3,6 +3,7 @@ import { Section } from "@/components/section";
 import { ServiceCard } from "@/components/service-card";
 import { ButtonLink } from "@/components/button-link";
 import { pageMetadata } from "@/lib/metadata";
+import { seoLandingPages } from "@/lib/seo-landing-pages";
 import { systemHelpLinks } from "@/lib/service-pages";
 import { services } from "@/lib/site";
 
@@ -57,6 +58,13 @@ export default function LeistungenPage() {
             },
           ].map((service) => (
             <ServiceCard key={service.href} title={service.title} text={service.text} price="Mehr erfahren" href={service.href} icon={service.icon} />
+          ))}
+        </div>
+      </Section>
+      <Section title="Gezielte Hilfe nach Suchanfrage" text="ZusÃ¤tzliche Themenseiten fÃ¼r konkrete Probleme, lokale Suchanfragen und laufende Website- oder Shop-Hilfe.">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {seoLandingPages.map((page) => (
+            <ServiceCard key={page.slug} title={page.eyebrow} text={page.intro} price="Mehr erfahren" href={`/${page.slug}`} icon={page.icon} />
           ))}
         </div>
       </Section>
