@@ -2,6 +2,9 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { alternateFor, isEnglishPath, localeCookie, normalizePath } from "@/lib/i18n";
 
+const klickhafenDomains = new Set(["klickhafen.net", "www.klickhafen.net"]);
+const klickdesignsUrl = "https://www.klickdesigns.de/";
+
 const ignoredPrefixes = [
   "/admin",
   "/api",
@@ -27,6 +30,11 @@ function wantsGerman(request: NextRequest) {
 }
 
 export function proxy(request: NextRequest) {
+  const hostname = request.headers.get("host")?.split(":")[0]?.toLowerCase();
+  if (hostname && klickhafenDomains.has(hostname)) {
+    return NextResponse.redirect(klickdesignsUrl, 308);
+  }
+
   const pathname = normalizePath(request.nextUrl.pathname);
 
   if (ignoredPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
